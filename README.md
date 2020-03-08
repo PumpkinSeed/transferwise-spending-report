@@ -1,0 +1,1 @@
+# transferwise-spending-report
