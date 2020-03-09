@@ -12,7 +12,9 @@
     "buefy": "^0.8.12",
     "bulma": "^0.8.0",
     "core-js": "^3.6.4",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-money-format": "^1.1.1",
+    "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",

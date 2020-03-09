@@ -1,12 +1,13 @@
 <template>
-  <div class="account-card">
-    <div class="account-currency">{{ currency }}</div>
-    <money-format :value="amount" 
+  <div v-if="amount > 1" class="amount-card">
+    <money-format :value="amount"  
       :currency-code="currency"
       :subunit-value=true 
       :hide-subunits=false>
     </money-format>
-    
+  </div>
+  <div v-else class="amount-none">
+      No spending at all!
   </div>
 </template>
 
@@ -14,7 +15,7 @@
 import MoneyFormat from 'vue-money-format'
 
 export default {
-  name: 'AccountCard',
+  name: 'SpendingAmount',
   components: {
     'money-format': MoneyFormat
   },
@@ -27,20 +28,21 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.account-card{
-  width: 170px;
-  margin: 10px;
-  border-radius: 5px;
+.amount-card{
+  width: 600px;
+  margin: 5px;
   color: rgb(37, 54, 85);
-  background: rgb(68, 238, 112);
-  padding: 10px;
-}
-.account-currency{
-  text-align: left;
+  width: 200xp;
+  padding: 5px;
   font-size: 22px;
+  border-bottom: rgba(37, 54, 85, 0.3) 3px solid;
 }
-.account-amount{
-  text-align: left;
-  font-size: 15px;
+.amount-none {
+  width: 600px;
+  margin: 5px;
+  color: rgb(37, 54, 85);
+  width: 200xp;
+  padding: 5px;
+  font-size: 22px;
 }
 </style>
