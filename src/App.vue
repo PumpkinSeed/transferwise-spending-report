@@ -1,16 +1,19 @@
 <template>
   <div id="app">
+    <Header/>
     <SpendingReport/>
   </div>
 </template>
 
 <script>
 import SpendingReport from './components/SpendingReport.vue'
+import Header from './components/Header.vue'
 
 export default {
   name: 'App',
   components: {
-    SpendingReport
+    SpendingReport,
+    Header
   }
 }
 </script>

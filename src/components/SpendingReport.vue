@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <Header />
     <section class="input-fields">
       <b-input placeholder="API Key" class="api_key" v-model="apiKey"></b-input>
       <datepicker input-class="datapicker-input-field" wrapper-class="datapicker-wrapper" v-model="startDate"></datepicker>
@@ -29,7 +28,6 @@ import ProfileCard from "./ProfileCard.vue";
 import AccountCard from "./AccountCard.vue";
 import SpendingAmount from "./SpendingAmount.vue";
 import Category from "./Category.vue";
-import Header from "./Header";
 import Datepicker from 'vuejs-datepicker';
 
 export default {
@@ -37,10 +35,6 @@ export default {
   data () {
     return {
       apiKey: '',
-      currentProfileID: '',
-      // balances: [],
-      accountID: '',
-      currentBalanceID: '',
       spent: {},
       amountTotal: 0,
       categories: {},
@@ -61,8 +55,7 @@ export default {
     AccountCard,
     Datepicker,
     SpendingAmount,
-    Category,
-    Header
+    Category
   },
   props: {
     msg: String
@@ -72,58 +65,17 @@ export default {
       this.setDefaults()
     },
     setDefaults() {
-      // this.printAccounts();
       if (this.apiKey) {
         this.$store.dispatch('setApiKey', this.apiKey);
       }
       this.$store.dispatch('fetchProfiles');
     },
-    // printAccounts() {
-    //   this.profiles = [];
-    //   axios.get('/v1/profiles')
-    //   .then(response => {
-    //     console.log('printAccounts resp: ', response);
-    //     response.data.forEach(element => {
-    //       let profile = {
-    //         id: element.id,
-    //         type: element.type
-    //       }
-    //       profile.isBusiness = element.type == "business"
-
-    //       if (profile.type === "personal") {
-    //         profile.name = element.details.firstName
-    //         profile.name += ' '
-    //         profile.name += element.details.lastName
-    //       } else if (profile.type === "business") {
-    //         profile.name = element.details.name
-    //       }
-    //       this.profiles.push(profile)
-    //     });
-    //   })
-    //   .catch(error => console.log(error))
-    // },
     fetchAccounts(id) {
       this.formatDate(this.startDate);
       this.formatDate(this.endDate);
       this.$store.dispatch('selectProfile', id);
       this.$store.dispatch('fetchAccounts', id);
       this.currentProfileID = id;
-      // this.balances = [];
-      // this.currentProfileID = id;
-      // axios.get('/v1/borderless-accounts?profileId='+id)
-      // .then(response => {
-      //   console.log('fetchAccounts resp: ', response);
-      //   this.accountID = response.data[0].id
-      //   response.data[0].balances.forEach(element => {
-      //     let balance = {
-      //       id: element.id,
-      //       currency: element.currency,
-      //       amount: element.amount.value
-      //     }
-      //     this.currentBalanceID = element.id;
-      //     this.balances.push(balance);
-      //   })
-      // })
     },
     fetchStatement(currency) {
       this.spent = {};
