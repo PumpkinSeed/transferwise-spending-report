@@ -9,8 +9,9 @@ export default new Vuex.Store({
   state: {
     apiKey: undefined,
     profiles: [],
+    selectedProfileId: undefined,
     accounts: [],
-    balance: undefined,
+    selectedAccountId: undefined,
     statement: undefined,
   },
 
@@ -21,11 +22,21 @@ export default new Vuex.Store({
     profiles(state) {
       return state.profiles;
     },
+    selectedProfileId(state) {
+      return state.selectedProfileId;
+    },
     accounts(state) {
       return state.accounts;
     },
-    balance(state) {
-      return state.balance;
+    selectedAccountId(state) {
+      return state.selectedAccountId;
+    },
+    accountBalances(state) {
+      if (state.accounts.length > 0) {
+        return state.accounts[0].balances;
+      } else {
+        return [];
+      }
     },
     statement(state) {
       return state.statement;
@@ -39,11 +50,14 @@ export default new Vuex.Store({
     'SET_PROFILES' (state, profiles) {
       state.profiles = profiles;
     },
+    'SET_SELECTED_PROFILE_ID' (state, profileId) {
+      state.selectedProfileId = profileId;
+    },
     'SET_ACCOUNTS' (state, accounts) {
       state.accounts = accounts;
     },
-    'SET_BALANCE' (state, balance) {
-      state.balance = balance;
+    'SET_SELECTED_ACCOUNT_ID' (state, accountId) {
+      state.selectedAccountId = accountId;
     },
     'SET_STATEMENT' (state, statement) {
       state.statement = statement
@@ -61,7 +75,7 @@ export default new Vuex.Store({
     setApiKey({commit}, apiKey) {
       commit('SET_API_KEY', apiKey);
       localStorage.setItem('apiKey', apiKey);
-      axios.defaults.headers.common['Authorization'] = 'Bearer '+this.apiKey;
+      axios.defaults.headers.common['Authorization'] = 'Bearer '+ apiKey;
     },
     removeApiKey({commit}) {
       commit('SET_API_KEY', undefined);
@@ -69,7 +83,6 @@ export default new Vuex.Store({
       delete axios.defaults.headers.common['Authorization'];
     },
     fetchProfiles({commit}) {
-      console.log('fetchProfiles');
       const profiles = [];
       axios.get('/v1/profiles')
       .then(response => {
@@ -93,21 +106,33 @@ export default new Vuex.Store({
       })
       .catch(error => console.log(error))
     },
-    fetchAccounts({commit}, profileId) {
-      const accounts = [];
+    selectProfile({commit}, profileId) {
+      commit('SET_SELECTED_PROFILE_ID', profileId);
+    },
+    fetchAccounts({commit, dispatch}, profileId) {
+      let accounts = [];
       axios.get('/v1/borderless-accounts?profileId=' + profileId)
       .then(response => {
-        response.data[0].balances.forEach(element => {
-          let balance = {
+        console.log('fetchAccounts: ', response);
+        accounts = response.data.map((element) => {
+          return {
             id: element.id,
-            currency: element.currency,
-            amount: element.amount.value
+            balances: element.balances.map((element) => {
+              return {
+                id: element.id,
+                currency: element.currency,
+                amount: element.amount.value
+              }
+            })
           }
-          accounts.push(balance);
         });
         commit('SET_ACCOUNTS', accounts);
+        dispatch('selectAccount', accounts[0].id);
+        console.log('selected account id: ', accounts[0].id, this.state);
       });
+    },
+    selectAccount({commit}, accountId) {
+      commit('SET_SELECTED_ACCOUNT_ID', accountId);
     }
-
   }
 })

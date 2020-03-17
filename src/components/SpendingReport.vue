@@ -13,7 +13,7 @@
       </li>
       <h1>Balances</h1>
       <li v-for="balance in balances" :key="balance.id">
-        <AccountCard @click.native="fetchStatement(balance.currency)" v-bind:currency="balance.currency" v-bind:amount="balance.amount"/>
+        <AccountCard @click.native="fetchStatement(balance.id, balance.currency)" v-bind:currency="balance.currency" v-bind:amount="balance.amount"/>
       </li>
       <SpendingAmount v-bind:currency="spent.currency" v-bind:amount="spent.amount" />
       <table class="category-table" v-for="category in categories" :key="category.name">
@@ -54,7 +54,7 @@ export default {
       return this.$store.getters.profiles;
     },
     balances() {
-      return this.$store.getters.accounts;
+      return this.$store.getters.accountBalances;
     }
   },
   components: {
@@ -70,13 +70,13 @@ export default {
   },
   methods: {
     clickMe() {
-      localStorage.apiKey = this.apiKey;
       this.setDefaults()
     },
     setDefaults() {
-      axios.defaults.baseURL = 'https://api.transferwise.com';
-      axios.defaults.headers.common['Authorization'] = 'Bearer '+this.apiKey;
       // this.printAccounts();
+      if (this.apiKey) {
+        this.$store.dispatch('setApiKey', this.apiKey);
+      }
       this.$store.dispatch('fetchProfiles');
     },
     // printAccounts() {
@@ -106,7 +106,9 @@ export default {
     fetchAccounts(id) {
       this.formatDate(this.startDate);
       this.formatDate(this.endDate);
+      this.$store.dispatch('selectProfile', id);
       this.$store.dispatch('fetchAccounts', id);
+      this.currentProfileID = id;
       // this.balances = [];
       // this.currentProfileID = id;
       // axios.get('/v1/borderless-accounts?profileId='+id)
@@ -129,6 +131,10 @@ export default {
       this.categories = {};
       let start = this.formatDate(this.startDate)
       let end = this.formatDate(this.endDate)
+      this.currentProfileID = this.$store.getters.selectedProfileId;
+      console.log('current profile id', this.currentProfileId);
+      this.accountID = this.$store.getters.selectedAccountId;
+      console.log('current account id', this.accountID);
       axios.get('v3/profiles/'+this.currentProfileID+'/borderless-accounts/'+this.accountID+'/statement.json?currency='+currency+'&intervalStart='+start+'&intervalEnd='+end)
       .then(response => {
         console.log('fetchStatement: ', response);
@@ -169,10 +175,8 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.apiKey !== "") {
-      this.apiKey = localStorage.apiKey;
-      this.clickMe()
-    }
+      this.$store.dispatch('init');
+      this.clickMe();
   },
 }
 </script>
