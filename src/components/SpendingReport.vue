@@ -74,6 +74,7 @@ export default {
       this.profiles = [];
       axios.get('/v1/profiles')
       .then(response => {
+        console.log('printAccounts resp: ', response);
         response.data.forEach(element => {
           let profile = {
             id: element.id,
@@ -100,6 +101,7 @@ export default {
       this.currentProfileID = id;
       axios.get('/v1/borderless-accounts?profileId='+id)
       .then(response => {
+        console.log('fetchAccounts resp: ', response);
         this.accountID = response.data[0].id
         response.data[0].balances.forEach(element => {
           let balance = {
@@ -119,6 +121,7 @@ export default {
       let end = this.formatDate(this.endDate)
       axios.get('v3/profiles/'+this.currentProfileID+'/borderless-accounts/'+this.accountID+'/statement.json?currency='+currency+'&intervalStart='+start+'&intervalEnd='+end)
       .then(response => {
+        console.log('fetchStatement: ', response);
         let spent = {
           amount: 0,
           currency: "",
