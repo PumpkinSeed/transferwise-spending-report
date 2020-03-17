@@ -37,7 +37,7 @@ export default {
   data () {
     return {
       apiKey: '',
-      profiles: [],
+      // profiles: [],
       currentProfileID: '',
       balances: [],
       accountID: '',
@@ -47,6 +47,11 @@ export default {
       categories: {},
       startDate: new Date().setMonth(new Date().getMonth() - 1),
       endDate: new Date(),
+    }
+  },
+  computed: {
+    profiles() {
+      return this.$store.getters.profiles;
     }
   },
   components: {
@@ -68,7 +73,8 @@ export default {
     setDefaults() {
       axios.defaults.baseURL = 'https://api.transferwise.com';
       axios.defaults.headers.common['Authorization'] = 'Bearer '+this.apiKey;
-      this.printAccounts();
+      // this.printAccounts();
+      this.$store.dispatch('fetchProfiles');
     },
     printAccounts() {
       this.profiles = [];
