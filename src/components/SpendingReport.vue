@@ -37,7 +37,6 @@ export default {
   data () {
     return {
       apiKey: '',
-      // profiles: [],
       currentProfileID: '',
       // balances: [],
       accountID: '',
@@ -131,11 +130,9 @@ export default {
       this.categories = {};
       let start = this.formatDate(this.startDate)
       let end = this.formatDate(this.endDate)
-      this.currentProfileID = this.$store.getters.selectedProfileId;
-      console.log('current profile id', this.currentProfileId);
-      this.accountID = this.$store.getters.selectedAccountId;
-      console.log('current account id', this.accountID);
-      axios.get('v3/profiles/'+this.currentProfileID+'/borderless-accounts/'+this.accountID+'/statement.json?currency='+currency+'&intervalStart='+start+'&intervalEnd='+end)
+      const currentProfileID = this.$store.getters.selectedProfileId;
+      const accountID = this.$store.getters.selectedAccountId;
+      axios.get('v3/profiles/'+currentProfileID+'/borderless-accounts/'+accountID+'/statement.json?currency='+currency+'&intervalStart='+start+'&intervalEnd='+end)
       .then(response => {
         console.log('fetchStatement: ', response);
         let spent = {
