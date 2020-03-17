@@ -39,7 +39,7 @@ export default {
       apiKey: '',
       // profiles: [],
       currentProfileID: '',
-      balances: [],
+      // balances: [],
       accountID: '',
       currentBalanceID: '',
       spent: {},
@@ -52,6 +52,9 @@ export default {
   computed: {
     profiles() {
       return this.$store.getters.profiles;
+    },
+    balances() {
+      return this.$store.getters.accounts;
     }
   },
   components: {
@@ -103,22 +106,23 @@ export default {
     fetchAccounts(id) {
       this.formatDate(this.startDate);
       this.formatDate(this.endDate);
-      this.balances = [];
-      this.currentProfileID = id;
-      axios.get('/v1/borderless-accounts?profileId='+id)
-      .then(response => {
-        console.log('fetchAccounts resp: ', response);
-        this.accountID = response.data[0].id
-        response.data[0].balances.forEach(element => {
-          let balance = {
-            id: element.id,
-            currency: element.currency,
-            amount: element.amount.value
-          }
-          this.currentBalanceID = element.id;
-          this.balances.push(balance);
-        })
-      })
+      this.$store.dispatch('fetchAccounts', id);
+      // this.balances = [];
+      // this.currentProfileID = id;
+      // axios.get('/v1/borderless-accounts?profileId='+id)
+      // .then(response => {
+      //   console.log('fetchAccounts resp: ', response);
+      //   this.accountID = response.data[0].id
+      //   response.data[0].balances.forEach(element => {
+      //     let balance = {
+      //       id: element.id,
+      //       currency: element.currency,
+      //       amount: element.amount.value
+      //     }
+      //     this.currentBalanceID = element.id;
+      //     this.balances.push(balance);
+      //   })
+      // })
     },
     fetchStatement(currency) {
       this.spent = {};

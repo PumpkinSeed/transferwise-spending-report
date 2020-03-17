@@ -92,6 +92,21 @@ export default new Vuex.Store({
         commit('SET_PROFILES', profiles);
       })
       .catch(error => console.log(error))
+    },
+    fetchAccounts({commit}, profileId) {
+      const accounts = [];
+      axios.get('/v1/borderless-accounts?profileId=' + profileId)
+      .then(response => {
+        response.data[0].balances.forEach(element => {
+          let balance = {
+            id: element.id,
+            currency: element.currency,
+            amount: element.amount.value
+          }
+          accounts.push(balance);
+        });
+        commit('SET_ACCOUNTS', accounts);
+      });
     }
 
   }
