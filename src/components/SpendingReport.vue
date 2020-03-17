@@ -13,7 +13,7 @@
       </li>
       <h1>Balances</h1>
       <li v-for="balance in balances" :key="balance.id">
-        <AccountCard @click.native="fetchStatement(balance.id, balance.currency)" v-bind:currency="balance.currency" v-bind:amount="balance.amount"/>
+        <AccountCard @click.native="fetchStatement(balance.currency)" v-bind:currency="balance.currency" v-bind:amount="balance.amount"/>
       </li>
       <SpendingAmount v-bind:currency="spent.currency" v-bind:amount="spent.amount" />
       <table class="category-table" v-for="category in categories" :key="category.name">
