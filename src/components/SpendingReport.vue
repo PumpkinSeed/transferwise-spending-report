@@ -84,6 +84,7 @@ export default {
       let end = this.formatDate(this.endDate)
       const currentProfileID = this.$store.getters.selectedProfileId;
       const accountID = this.$store.getters.selectedAccountId;
+      this.$store.dispatch('fetchStatement', {profileId: currentProfileID, accountId: accountID, currency, start, end});
       axios.get('v3/profiles/'+currentProfileID+'/borderless-accounts/'+accountID+'/statement.json?currency='+currency+'&intervalStart='+start+'&intervalEnd='+end)
       .then(response => {
         console.log('fetchStatement: ', response);

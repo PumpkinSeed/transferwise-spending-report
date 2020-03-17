@@ -133,6 +133,18 @@ export default new Vuex.Store({
     },
     selectAccount({commit}, accountId) {
       commit('SET_SELECTED_ACCOUNT_ID', accountId);
+    },
+    fetchStatement({commit}, payload) {
+      const params = {
+        currency: payload.currency,
+        intervalStart: payload.start,
+        intervalEnd: payload.end
+      }
+      console.log('fetch dispatch: ', payload);
+      axios.get(`v3/profiles/${payload.profileId}/borderless-accounts/${payload.accountId}/statement.json`, {params})
+        .then((result) => console.log(result))
+        .catch((err) => console.log(err));
+      commit('SET_SELECTED_PROFILE_ID', payload.profileId);
     }
   }
 })
