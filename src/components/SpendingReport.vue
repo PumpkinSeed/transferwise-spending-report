@@ -76,30 +76,30 @@ export default {
       // this.printAccounts();
       this.$store.dispatch('fetchProfiles');
     },
-    printAccounts() {
-      this.profiles = [];
-      axios.get('/v1/profiles')
-      .then(response => {
-        console.log('printAccounts resp: ', response);
-        response.data.forEach(element => {
-          let profile = {
-            id: element.id,
-            type: element.type
-          }
-          profile.isBusiness = element.type == "business"
+    // printAccounts() {
+    //   this.profiles = [];
+    //   axios.get('/v1/profiles')
+    //   .then(response => {
+    //     console.log('printAccounts resp: ', response);
+    //     response.data.forEach(element => {
+    //       let profile = {
+    //         id: element.id,
+    //         type: element.type
+    //       }
+    //       profile.isBusiness = element.type == "business"
 
-          if (profile.type === "personal") {
-            profile.name = element.details.firstName
-            profile.name += ' '
-            profile.name += element.details.lastName
-          } else if (profile.type === "business") {
-            profile.name = element.details.name
-          }
-          this.profiles.push(profile)
-        });
-      })
-      .catch(error => console.log(error))
-    },
+    //       if (profile.type === "personal") {
+    //         profile.name = element.details.firstName
+    //         profile.name += ' '
+    //         profile.name += element.details.lastName
+    //       } else if (profile.type === "business") {
+    //         profile.name = element.details.name
+    //       }
+    //       this.profiles.push(profile)
+    //     });
+    //   })
+    //   .catch(error => console.log(error))
+    // },
     fetchAccounts(id) {
       this.formatDate(this.startDate);
       this.formatDate(this.endDate);
