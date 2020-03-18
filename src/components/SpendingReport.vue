@@ -23,12 +23,13 @@
 </template>
 
 <script>
-import axios from "axios";
 import ProfileCard from "./ProfileCard.vue";
 import AccountCard from "./AccountCard.vue";
 import SpendingAmount from "./SpendingAmount.vue";
 import Category from "./Category.vue";
 import Datepicker from 'vuejs-datepicker';
+
+import transferwise from '../repositories/TransferwiseRepository';
 
 export default {
   name: 'SpendingReport',
@@ -85,7 +86,7 @@ export default {
       const currentProfileID = this.$store.getters.selectedProfileId;
       const accountID = this.$store.getters.selectedAccountId;
       this.$store.dispatch('fetchStatement', {profileId: currentProfileID, accountId: accountID, currency, start, end});
-      axios.get('v3/profiles/'+currentProfileID+'/borderless-accounts/'+accountID+'/statement.json?currency='+currency+'&intervalStart='+start+'&intervalEnd='+end)
+      transferwise.getStatement(currentProfileID, accountID, currency, start, end)
       .then(response => {
         console.log('fetchStatement: ', response);
         let spent = {

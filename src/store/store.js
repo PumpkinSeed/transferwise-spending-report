@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
+import transferwise from '../repositories/TransferwiseRepository';
 
 Vue.use(Vuex);
 
@@ -66,7 +66,6 @@ export default new Vuex.Store({
 
   actions: {
     init({dispatch}) {
-      axios.defaults.baseURL = 'https://api.transferwise.com';
       const apiKey = localStorage.getItem('apiKey');
       if (apiKey) {
         dispatch('setApiKey', apiKey);
@@ -75,16 +74,16 @@ export default new Vuex.Store({
     setApiKey({commit}, apiKey) {
       commit('SET_API_KEY', apiKey);
       localStorage.setItem('apiKey', apiKey);
-      axios.defaults.headers.common['Authorization'] = 'Bearer '+ apiKey;
+      transferwise.setAuthorization(apiKey);
     },
     removeApiKey({commit}) {
       commit('SET_API_KEY', undefined);
       localStorage.removeItem('apiKey');
-      delete axios.defaults.headers.common['Authorization'];
+      transferwise.removeAuthorization();
     },
     fetchProfiles({commit}) {
       const profiles = [];
-      axios.get('/v1/profiles')
+      transferwise.getProfiles()
       .then(response => {
         response.data.forEach(element => {
           let profile = {
@@ -111,7 +110,7 @@ export default new Vuex.Store({
     },
     fetchAccounts({commit, dispatch}, profileId) {
       let accounts = [];
-      axios.get('/v1/borderless-accounts?profileId=' + profileId)
+      transferwise.getAccounts(profileId)
       .then(response => {
         console.log('fetchAccounts: ', response);
         accounts = response.data.map((element) => {
@@ -135,13 +134,7 @@ export default new Vuex.Store({
       commit('SET_SELECTED_ACCOUNT_ID', accountId);
     },
     fetchStatement({commit}, payload) {
-      const params = {
-        currency: payload.currency,
-        intervalStart: payload.start,
-        intervalEnd: payload.end
-      }
-      console.log('fetch dispatch: ', payload);
-      axios.get(`v3/profiles/${payload.profileId}/borderless-accounts/${payload.accountId}/statement.json`, {params})
+      transferwise.getStatement(payload.profileId, payload.accountId, payload.currency, payload.start, payload.end)
         .then((result) => console.log(result))
         .catch((err) => console.log(err));
       commit('SET_SELECTED_PROFILE_ID', payload.profileId);
