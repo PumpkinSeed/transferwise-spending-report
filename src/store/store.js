@@ -40,6 +40,31 @@ export default new Vuex.Store({
     },
     statement(state) {
       return state.statement;
+    },
+    categories(state) {
+      if (state.statement === undefined){
+        return undefined;
+      }
+      const categories = {};
+      let sum = 0;
+      state.statement.transactions.forEach((transaction) => {
+        if (transaction.type === "DEBIT" && transaction.details.type !== "CONVERSION") {
+          if (categories[transaction.details.category] === undefined) {
+            categories[transaction.details.category] = {
+              counter: 1,
+              name: transaction.details.category,
+              amount: transaction.details.amount.value,
+              currency: transaction.details.amount.currency
+            };
+          } else {
+            categories[transaction.details.category].counter++;
+            categories[transaction.details.category].amount += transaction.details.amount.value;
+          }
+          sum += transaction.details.amount.value;
+        }
+      });
+      Object.values(categories).forEach((category) => category.percent = (category.amount / sum) * 100);
+      return categories;
     }
   },
 
@@ -71,16 +96,19 @@ export default new Vuex.Store({
         dispatch('setApiKey', apiKey);
       }
     },
+
     setApiKey({commit}, apiKey) {
       commit('SET_API_KEY', apiKey);
       localStorage.setItem('apiKey', apiKey);
       transferwise.setAuthorization(apiKey);
     },
+
     removeApiKey({commit}) {
       commit('SET_API_KEY', undefined);
       localStorage.removeItem('apiKey');
       transferwise.removeAuthorization();
     },
+
     fetchProfiles({commit}) {
       const profiles = [];
       transferwise.getProfiles()
@@ -105,14 +133,15 @@ export default new Vuex.Store({
       })
       .catch(error => console.log(error))
     },
+
     selectProfile({commit}, profileId) {
       commit('SET_SELECTED_PROFILE_ID', profileId);
     },
+
     fetchAccounts({commit, dispatch}, profileId) {
       let accounts = [];
       transferwise.getAccounts(profileId)
       .then(response => {
-        console.log('fetchAccounts: ', response);
         accounts = response.data.map((element) => {
           return {
             id: element.id,
@@ -127,17 +156,18 @@ export default new Vuex.Store({
         });
         commit('SET_ACCOUNTS', accounts);
         dispatch('selectAccount', accounts[0].id);
-        console.log('selected account id: ', accounts[0].id, this.state);
       });
     },
+
     selectAccount({commit}, accountId) {
       commit('SET_SELECTED_ACCOUNT_ID', accountId);
     },
+
     fetchStatement({commit}, payload) {
       transferwise.getStatement(payload.profileId, payload.accountId, payload.currency, payload.start, payload.end)
-        .then((result) => console.log(result))
-        .catch((err) => console.log(err));
-      commit('SET_SELECTED_PROFILE_ID', payload.profileId);
+        .then((result) => {
+          commit('SET_STATEMENT', result.data);
+        });
     }
   }
-})
+});

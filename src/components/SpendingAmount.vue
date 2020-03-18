@@ -19,9 +19,17 @@ export default {
   components: {
     'money-format': MoneyFormat
   },
-  props: {
-    currency: String,
-    amount: Number,
+  computed: {
+    amount() {
+      const categories = this.$store.getters.categories;
+      if (!categories) return 0;
+      return Object.values(categories).reduce((acc, cur) => acc + cur.amount, 0);
+    },
+    currency() {
+      const categories = this.$store.getters.categories;
+      if (!categories) return 'EUR';
+      return Object.keys(categories)[0].currency;
+    }
   },
 }
 </script>

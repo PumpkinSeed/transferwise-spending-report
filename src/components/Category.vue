@@ -1,17 +1,17 @@
 <template>
   <tr class="category-line">
-    <td class="category-name">{{ name }}</td>
+    <td class="category-name">{{ category.name }}</td>
     <td class="category-amount">
-      <div v-if="amount > 1" class="ategory-amount-format">
-        <money-format :value="amount"  
-          :currency-code="currency"
+      <div v-if="category.amount > 1" class="ategory-amount-format">
+        <money-format :value="category.amount"  
+          :currency-code="category.currency"
           :subunit-value=true 
           :hide-subunits=false>
         </money-format>
       </div>
     </td>
-    <td class="category-count">{{ count }} times</td>
-    <td class="category-perc">{{ perc }}%</td>
+    <td class="category-count">{{ category.counter }} times</td>
+    <td class="category-perc">{{ category.percent.toFixed(2) }}%</td>
   </tr>
 </template>
 
@@ -29,21 +29,9 @@ export default {
     }
   },
   props: {
+    category: Object,
     total: Number,
-    name: String,
-    count: Number,
-    amount: Number,
-    currency: String,
   },
-  methods: {
-    calculate() {
-      let perc = (this.amount/this.total)*100;
-      this.perc = (Math.round(perc * 100) / 100).toFixed(2);
-    }
-  },
-  mounted() {
-    this.calculate()
-  }
 }
 </script>
 
