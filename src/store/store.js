@@ -97,16 +97,32 @@ export default new Vuex.Store({
       }
     },
 
-    setApiKey({commit}, apiKey) {
-      commit('SET_API_KEY', apiKey);
-      localStorage.setItem('apiKey', apiKey);
-      transferwise.setAuthorization(apiKey);
+    setApiKey({commit, dispatch, getters}, apiKey) {
+      if (!apiKey || apiKey === '') {
+        dispatch('clearState');
+        localStorage.removeItem('apiKey');
+      } else if (apiKey !== getters.apiKey) {
+        dispatch('clearState');
+        commit('SET_API_KEY', apiKey);
+        localStorage.setItem('apiKey', apiKey);
+        transferwise.setAuthorization(apiKey);
+        dispatch('fetchProfiles');
+      }
     },
 
-    removeApiKey({commit}) {
-      commit('SET_API_KEY', undefined);
+    removeApiKey({dispatch}) {
+      dispatch('clearState');
       localStorage.removeItem('apiKey');
       transferwise.removeAuthorization();
+    },
+
+    clearState({commit}) {
+      commit('SET_API_KEY', undefined);
+      commit('SET_PROFILES', []);
+      commit('SET_SELECTED_PROFILE_ID', undefined);
+      commit('SET_ACCOUNTS', []);
+      commit('SET_SELECTED_ACCOUNT_ID', undefined);
+      commit('SET_STATEMENT', undefined);
     },
 
     fetchProfiles({commit}) {

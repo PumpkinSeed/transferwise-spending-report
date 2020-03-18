@@ -19,7 +19,6 @@
               v-for="(profile, index) in profiles" :key="index"
               :name="profile.name" :type="profile.type"
               @click.native="onSelectProfile(index)"/>
-            
           </div>
         </div>
       </div>
@@ -28,9 +27,26 @@
       </div>
     </div>
 
+
     <div class="level-right">
       <div class="level-item">
-        asdf
+        <div class="dropdown is-right is-hoverable">
+          <div class="dropdown-trigger">
+            <button class="button">
+              <span>api key</span>
+            </button>
+          </div>
+          <div class="dropdown-menu">
+            <div class="dropdown-content">
+              <b-input placeholder="API Key" class="api_key" v-model="inputApiKey"></b-input>
+              <div class="level-left">
+                <button class="button" @click="onSetApiKey">set</button>
+                <button class="button" @click="onClearApiKey">clear</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -58,7 +74,8 @@ export default {
 
   data() {
     return {
-      selected: 0
+      selected: 0,
+      inputApiKey: ''
     }
   },
 
@@ -66,7 +83,18 @@ export default {
     onSelectProfile(index) {
       this.selected = index;
       this.$store.dispatch('selectProfile', this.profiles[this.selected].id);
+    },
+    onSetApiKey() {
+      this.$store.dispatch('setApiKey', this.inputApiKey);
+    },
+    onClearApiKey() {
+      this.inputApiKey = '';
+      this.$store.dispatch('removeApiKey');
     }
+  },
+  mounted() {
+    console.log('mount this shit', this.$store.getters.apiKey);
+    this.inputApiKey = this.$store.getters.apiKey;
   }
 }
 </script>
