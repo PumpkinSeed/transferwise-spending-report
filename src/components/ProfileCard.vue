@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'profile-card-odd' : isBusiness}" class="profile-card">
+  <div :class="{ 'profile-card-odd' : type === 'business'}" class="profile-card">
     <div class="profile-name">{{ name }}</div>
     <div class="profile-type">{{ type }}</div>
     
@@ -13,7 +13,7 @@ export default {
     type: String,
     name: String,
     isBusiness: Boolean,
-  },
+  }
 }
 </script>
 
