@@ -30,9 +30,9 @@
 
     <div class="level-right">
       <div class="level-item">
-        <div class="dropdown is-right is-hoverable">
+        <div class="dropdown is-right" :class="{ 'is-active': showApiDropdown }">
           <div class="dropdown-trigger">
-            <button class="button">
+            <button class="button" @click="showApiDropdown = !showApiDropdown">
               <span>api key</span>
             </button>
           </div>
@@ -43,7 +43,6 @@
                 <button class="button" @click="onSetApiKey">set</button>
                 <button class="button" @click="onClearApiKey">clear</button>
               </div>
-
             </div>
           </div>
         </div>
@@ -66,15 +65,15 @@ export default {
 
   computed: {
     profiles() {
-      const profiles = this.$store.getters.profiles;
-      console.log(profiles);
-      return profiles;
+      return this.$store.getters.profiles;
     }
   },
 
   data() {
     return {
       selected: 0,
+      // TODO close api dropdown when clicking away
+      showApiDropdown: false,
       inputApiKey: ''
     }
   },
@@ -86,15 +85,18 @@ export default {
     },
     onSetApiKey() {
       this.$store.dispatch('setApiKey', this.inputApiKey);
+      this.showApiDropdown = false;
     },
     onClearApiKey() {
       this.inputApiKey = '';
       this.$store.dispatch('removeApiKey');
+      this.showApiDropdown = false;
     }
   },
   mounted() {
-    console.log('mount this shit', this.$store.getters.apiKey);
-    this.inputApiKey = this.$store.getters.apiKey;
+    this.$store.dispatch('init').then(() => {
+      this.inputApiKey = this.$store.getters.apiKey;
+    });
   }
 }
 </script>
