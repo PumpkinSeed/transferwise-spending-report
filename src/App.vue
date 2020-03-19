@@ -1,19 +1,21 @@
 <template>
   <div id="app">
-    <Header/>
-    <SpendingReport/>
+    <app-header/>
+    <app-main></app-main>
   </div>
 </template>
 
 <script>
-import SpendingReport from './components/SpendingReport.vue'
-import Header from './components/Header.vue'
+// import SpendingReport from './components/SpendingReport.vue';
+import Header from './components/Header.vue';
+import Main from './components/Main.vue';
 
 export default {
   name: 'App',
   components: {
-    SpendingReport,
-    Header
+    // SpendingReport,
+    appHeader: Header,
+    appMain: Main
   }
 }
 </script>
