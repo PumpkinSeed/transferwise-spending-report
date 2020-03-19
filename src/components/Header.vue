@@ -104,6 +104,7 @@ export default {
   mounted() {
     this.init().then(() => {
       this.inputApiKey = this.apiKey;
+      this.selectProfile(this.profiles[0].id)
     })
   }
 }

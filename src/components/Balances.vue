@@ -22,8 +22,8 @@ export default {
     }
   },
   mounted() {
-    // const profileId = this.$store.getters.selectedProfileId;
-    // this.$store.dispatch('fetchAccounts', profileId);
+    const profileId = this.$store.getters.selectedProfileId;
+    this.$store.dispatch('fetchAccounts', profileId);
   }
 }
 </script>

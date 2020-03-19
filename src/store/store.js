@@ -150,8 +150,9 @@ export default new Vuex.Store({
       .catch(error => console.log(error))
     },
 
-    selectProfile({commit}, profileId) {
+    selectProfile({commit, dispatch}, profileId) {
       commit('SET_SELECTED_PROFILE_ID', profileId);
+      dispatch('fetchAccounts', profileId);
     },
 
     fetchAccounts({commit, dispatch}, profileId) {
