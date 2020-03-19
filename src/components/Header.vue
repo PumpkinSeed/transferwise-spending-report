@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import ProfileCard from './ProfileCard.vue';
 
 export default {
@@ -64,9 +65,14 @@ export default {
   },
 
   computed: {
-    profiles() {
-      return this.$store.getters.profiles;
-    }
+    ...mapGetters({
+      profiles: 'profiles',
+      apiKey: 'apiKey'
+
+    })
+    // profiles() {
+    //   return this.$store.getters.profiles;
+    // }
   },
 
   data() {
@@ -79,24 +85,35 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      init: 'init',
+      selectProfile: 'selectProfile',
+      setApiKey: 'setApiKey',
+      removeApiKey: 'removeApiKey'
+    }),
     onSelectProfile(index) {
       this.selected = index;
-      this.$store.dispatch('selectProfile', this.profiles[this.selected].id);
+      this.selectProfile(this.profiles[this.selected].id);
     },
     onSetApiKey() {
-      this.$store.dispatch('setApiKey', this.inputApiKey);
+      this.setApiKey(this.inputApiKey);
+      // this.$store.dispatch('setApiKey', this.inputApiKey);
       this.showApiDropdown = false;
     },
     onClearApiKey() {
       this.inputApiKey = '';
-      this.$store.dispatch('removeApiKey');
+      this.removeApiKey();
+      // this.$store.dispatch('removeApiKey');
       this.showApiDropdown = false;
     }
   },
   mounted() {
-    this.$store.dispatch('init').then(() => {
-      this.inputApiKey = this.$store.getters.apiKey;
-    });
+    this.init().then(() => {
+      this.inputApiKey = this.apiKey;
+    })
+    // this.$store.dispatch('init').then(() => {
+    //   this.inputApiKey = this.$store.getters.apiKey;
+    // });
   }
 }
 </script>
