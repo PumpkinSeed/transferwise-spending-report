@@ -1,12 +1,15 @@
 <template>
   <div>
-    <h1>balances</h1>
-    <app-balance-card v-for="(balance, index) in balances" :key="index" :balance="balance"></app-balance-card>
+    <div class="columns is-mobile is-multiline is-centered">
+      <app-balance-card
+        v-for="(balance, index) in balances" :key="index"
+        :balance="balance"/>
+    </div>
   </div>
 </template>
 
 <script>
-// import { mappGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import BalanceCard from './BalanceCard.vue';
 
 export default {
@@ -14,16 +17,9 @@ export default {
     appBalanceCard: BalanceCard
   },
   computed: {
-    // ...mappGetters({
-    //   balances: 'accountBalances'
-    // })
-    balances() {
-      return this.$store.getters.accountBalances;
-    }
-  },
-  mounted() {
-    const profileId = this.$store.getters.selectedProfileId;
-    this.$store.dispatch('fetchAccounts', profileId);
+    ...mapGetters({
+      balances: 'accountBalances'
+    })
   }
 }
 </script>
