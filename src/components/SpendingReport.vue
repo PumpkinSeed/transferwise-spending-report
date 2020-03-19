@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import SpendingAmount from "./SpendingAmount.vue";
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
 import Datepicker from 'vuejs-datepicker';
@@ -38,13 +40,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      categories: 'spending/categories',
+      totalSpending: 'spending/totalSpending',
+      selectedBalanceCurrency: 'selectedBalanceCurrency',
+      profileId: 'selectedProfileId',
+      accountId: 'selectedAccountId'
+    }),
     isBalanceSelected() {
-      return !!this.$store.getters.selectedBalanceCurrency;
+      return !!this.selectedBalanceCurrency;
     },
-    categories() {
-      console.log(this.$store.getters.categories);
-      return this.$store.getters.categories;
-    }
   },
   components: {
     Datepicker,
@@ -58,11 +63,13 @@ export default {
     fetchStatement() {
       let start = this.formatDate(this.startDate)
       let end = this.formatDate(this.endDate)
-      const currentProfileID = this.$store.getters.selectedProfileId;
-      const accountID = this.$store.getters.selectedAccountId;
-      const currency = this.$store.getters.selectedBalanceCurrency;
-      console.log(currentProfileID, accountID, currency, start, end)
-      this.$store.dispatch('fetchStatement', {profileId: currentProfileID, accountId: accountID, currency, start, end})
+      const payload = {
+          profileId: this.profileId,
+          accountId: this.accountId,
+          currency: this.selectedBalanceCurrency,
+          start, end
+      };
+      this.$store.dispatch('spending/fetchStatement', payload);
     },
     formatDate(dateFromPicker) {
       let date = new Date(dateFromPicker)
@@ -72,7 +79,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 
 </style>
