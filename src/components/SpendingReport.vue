@@ -1,18 +1,27 @@
 <template>
   <div>
-    <div class="columns is-centered">
-      <div class="column is-half">
-        <datepicker input-class="input" v-model="startDate"></datepicker>
-        <datepicker input-class="input" v-model="endDate"></datepicker>
-        <button class="button is-fullwidth" @click="clickMe">Fetch</button>
-      </div>
+    <div v-if="!isBalanceSelected">
+      <h1>pick one of your balances to see spending</h1>
     </div>
-    <section class="input-fields">
-      <SpendingAmount/>
-      <table v-for="category in categories" :key="category.name">
-        <Category :category="category" />
-      </table>
-    </section>
+
+    <div v-else>
+
+      <div class="columns is-centered">
+        <div class="column is-half">
+          <datepicker input-class="input" v-model="startDate"></datepicker>
+          <datepicker input-class="input" v-model="endDate"></datepicker>
+          <button class="button is-fullwidth" @click="clickMe">Fetch</button>
+        </div>
+      </div>
+      <section class="input-fields">
+        <SpendingAmount/>
+        <table v-for="category in categories" :key="category.name">
+          <Category :category="category" />
+        </table>
+      </section>
+
+    </div>
+
   </div>
 </template>
 
@@ -29,6 +38,9 @@ export default {
     }
   },
   computed: {
+    isBalanceSelected() {
+      return !!this.$store.getters.selectedBalanceCurrency;
+    },
     profiles() {
       return this.$store.getters.profiles;
     },
