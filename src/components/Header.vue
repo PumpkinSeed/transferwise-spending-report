@@ -68,11 +68,7 @@ export default {
     ...mapGetters({
       profiles: 'profiles',
       apiKey: 'apiKey'
-
     })
-    // profiles() {
-    //   return this.$store.getters.profiles;
-    // }
   },
 
   data() {
@@ -97,13 +93,11 @@ export default {
     },
     onSetApiKey() {
       this.setApiKey(this.inputApiKey);
-      // this.$store.dispatch('setApiKey', this.inputApiKey);
       this.showApiDropdown = false;
     },
     onClearApiKey() {
       this.inputApiKey = '';
       this.removeApiKey();
-      // this.$store.dispatch('removeApiKey');
       this.showApiDropdown = false;
     }
   },
@@ -111,9 +105,6 @@ export default {
     this.init().then(() => {
       this.inputApiKey = this.apiKey;
     })
-    // this.$store.dispatch('init').then(() => {
-    //   this.inputApiKey = this.$store.getters.apiKey;
-    // });
   }
 }
 </script>
