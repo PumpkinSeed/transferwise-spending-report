@@ -1,6 +1,5 @@
 <template>
   <dir>
-    <h2>main</h2>
     <app-balances/>
   </dir>
 </template>

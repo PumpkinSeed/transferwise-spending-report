@@ -1,6 +1,6 @@
 <template>
-  <div class="account-card">
-    <div class="account-currency">{{ balance.currency }}</div>
+  <div class="balance-card">
+    <div class="balance-currency">{{ balance.currency }}</div>
     <money-format :value="balance.amount" 
       :currency-code="balance.currency"
       :subunit-value=true 
@@ -20,27 +20,25 @@ export default {
   },
   props: {
     balance: Object,
-    currency: String,
-    amount: Number,
   },
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.account-card{
+.balance-card {
   width: 170px;
   margin: 10px;
   border-radius: 5px;
   color: rgb(37, 54, 85);
   background: rgb(68, 238, 112);
   padding: 10px;
+  cursor: pointer;
 }
-.account-currency{
+.balance-currency {
   text-align: left;
   font-size: 22px;
 }
-.account-amount{
+.balance-amount {
   text-align: left;
   font-size: 15px;
 }

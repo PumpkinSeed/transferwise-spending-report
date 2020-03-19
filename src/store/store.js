@@ -12,6 +12,7 @@ export default new Vuex.Store({
     selectedProfileId: undefined,
     accounts: [],
     selectedAccountId: undefined,
+    selectedBalanceCurrency: undefined,
     statement: undefined,
   },
 
@@ -37,6 +38,9 @@ export default new Vuex.Store({
       } else {
         return [];
       }
+    },
+    selectedBalanceCurrency(state) {
+      return state.selectedBalanceCurrency;
     },
     statement(state) {
       return state.statement;
@@ -83,6 +87,9 @@ export default new Vuex.Store({
     },
     'SET_SELECTED_ACCOUNT_ID' (state, accountId) {
       state.selectedAccountId = accountId;
+    },
+    'SET_SELECTED_BALANCE_CURRENCY' (state, currecy) {
+      state.selectedBalanceCurrency = currecy;
     },
     'SET_STATEMENT' (state, statement) {
       state.statement = statement
@@ -176,8 +183,17 @@ export default new Vuex.Store({
       });
     },
 
-    selectAccount({commit}, accountId) {
+    selectAccount({commit, dispatch}, accountId) {
       commit('SET_SELECTED_ACCOUNT_ID', accountId);
+      dispatch('clearSelectedBalance');
+    },
+
+    selectBalanceCurrency({commit}, currency) {
+      commit('SET_SELECTED_BALANCE_CURRENCY', currency);
+    },
+
+    clearSelectedBalance({commit}) {
+      commit('SET_SELECTED_BALANCE_CURRENCY', undefined);
     },
 
     fetchStatement({commit}, payload) {
