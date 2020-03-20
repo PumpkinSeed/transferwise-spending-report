@@ -1,8 +1,8 @@
 import transferwise from '../../repositories/TransferwiseRepository';
 
 const state = {
-  startDate: new Date().setMonth(new Date().getMonth() - 1),
-  endDate: new Date(),
+  startDate: undefined,
+  endDate: undefined,
   statement: undefined,
 }
 
@@ -74,11 +74,24 @@ const getters = {
 
 const actions = {
 
-  fetchStatement({commit}, payload) {
-    transferwise.getStatement(payload.profileId, payload.accountId, payload.currency, payload.start, payload.end)
-      .then((result) => {
-        commit('SET_STATEMENT', result.data);
-      });
+  setStartDate({commit}, startDate) {
+    commit('SET_START_DATE', startDate);
+  },
+
+  setEndDate({commit}, endDate) {
+    commit('SET_END_DATE', endDate);
+  },
+
+  fetchStatement({commit, getters, rootGetters}) {
+    const profileId = rootGetters.selectedAccount.profileId;
+    const accountId = rootGetters.selectedAccount.id;
+    const currency = rootGetters.selectedBalanceCurrency;
+    const start = getters.startDate;
+    const end = getters.endDate;
+    transferwise.getStatement(profileId, accountId, currency, start, end)
+    .then((result) => {
+      commit('SET_STATEMENT', result.data);
+    });
   }
 
 }

@@ -10,7 +10,7 @@
         <div class="column is-half">
           <datepicker input-class="input" v-model="startDate"></datepicker>
           <datepicker input-class="input" v-model="endDate"></datepicker>
-          <button class="button is-fullwidth" @click="fetchStatement">Set Time</button>
+          <button class="button is-fullwidth" @click="onSetTimeRange">Set Time Range</button>
         </div>
       </div>
 
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import SpendingAmount from "./SpendingAmount.vue";
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
@@ -44,8 +44,6 @@ export default {
       categories: 'spending/categories',
       totalSpending: 'spending/totalSpending',
       selectedBalanceCurrency: 'selectedBalanceCurrency',
-      profileId: 'selectedProfileId',
-      account: 'selectedAccount'
     }),
     isBalanceSelected() {
       return !!this.selectedBalanceCurrency;
@@ -60,17 +58,17 @@ export default {
     msg: String
   },
   methods: {
-    fetchStatement() {
-      let start = this.formatDate(this.startDate)
-      let end = this.formatDate(this.endDate)
-      const payload = {
-          profileId: this.account.profileId,
-          accountId: this.account.id,
-          currency: this.selectedBalanceCurrency,
-          start, end
-      };
-      this.$store.dispatch('spending/fetchStatement', payload);
+    ...mapActions({
+      setStartDate: 'spending/setStartDate',
+      setEndDate: 'spending/setEndDate'
+    }),
+
+    onSetTimeRange() {
+      this.setStartDate(this.formatDate(this.startDate));
+      this.setEndDate(this.formatDate(this.endDate));
+      this.$store.dispatch('spending/fetchStatement');
     },
+
     formatDate(dateFromPicker) {
       let date = new Date(dateFromPicker)
       return date.toISOString()
