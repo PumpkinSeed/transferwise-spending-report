@@ -11,7 +11,8 @@
     <div class="level-item">
       <div class="dropdown is-hoverable" v-if="profiles.length > 0">
         <div class="dropdown-trigger">
-          <app-profile-card :name="profiles[selected].name" :type="profiles[selected].type"></app-profile-card>
+          <button class="button is-info" v-if="selected < 0">select a profile to see account balances</button>
+          <app-profile-card v-else :name="profiles[selected].name" :type="profiles[selected].type"></app-profile-card>
         </div>
         <div class="dropdown-menu" id="dropdown-menu4" role="menu">
           <div class="dropdown-content">
@@ -73,7 +74,7 @@ export default {
 
   data() {
     return {
-      selected: 0,
+      selected: -1,
       // TODO close api dropdown when clicking away
       showApiDropdown: false,
       inputApiKey: ''
@@ -104,7 +105,6 @@ export default {
   mounted() {
     this.init().then(() => {
       this.inputApiKey = this.apiKey;
-      this.selectProfile(this.profiles[0].id)
     })
   }
 }
