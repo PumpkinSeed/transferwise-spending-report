@@ -11,8 +11,10 @@
     "axios": "^0.19.2",
     "buefy": "^0.8.12",
     "bulma": "^0.8.0",
+    "chart.js": "^2.9.3",
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
+    "vue-chartjs": "^3.5.0",
     "vue-money-format": "^1.1.1",
     "vuejs-datepicker": "^1.6.2",
     "vuex": "^3.1.3"
