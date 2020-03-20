@@ -16,10 +16,7 @@ export default new Vuex.Store({
   state: {
     apiKey: undefined,
     profiles: [],
-    selectedProfileId: undefined,
     selectedAccount: undefined,
-    accounts: [],
-    selectedAccountId: undefined,
     selectedBalanceCurrency: undefined,
   },
 
@@ -30,24 +27,12 @@ export default new Vuex.Store({
     profiles(state) {
       return state.profiles;
     },
-    selectedProfileId(state) {
-      return state.selectedProfileId;
-    },
-    account(state) {
+    selectedAccount(state) {
       return state.selectedAccount;
     },
-    accounts(state) {
-      return state.accounts;
-    },
-    selectedAccountId(state) {
-      return state.selectedAccountId;
-    },
     accountBalances(state) {
-      if (state.accounts.length > 0) {
-        return state.accounts[0].balances;
-      } else {
-        return [];
-      }
+      if (!state.selectedAccount) return undefined;
+      return state.selectedAccount.balances; 
     },
     selectedBalanceCurrency(state) {
       return state.selectedBalanceCurrency;
@@ -61,17 +46,8 @@ export default new Vuex.Store({
     'SET_PROFILES' (state, profiles) {
       state.profiles = profiles;
     },
-    'SET_SELECTED_PROFILE_ID' (state, profileId) {
-      state.selectedProfileId = profileId;
-    },
     'SET_SELECTED_ACCOUNT' (state, account) {
       state.selectedAccount = account;
-    },
-    'SET_ACCOUNTS' (state, accounts) {
-      state.accounts = accounts;
-    },
-    'SET_SELECTED_ACCOUNT_ID' (state, accountId) {
-      state.selectedAccountId = accountId;
     },
     'SET_SELECTED_BALANCE_CURRENCY' (state, currecy) {
       state.selectedBalanceCurrency = currecy;
@@ -89,9 +65,8 @@ export default new Vuex.Store({
     clearState({commit}) {
       commit('SET_API_KEY', undefined);
       commit('SET_PROFILES', []);
-      commit('SET_SELECTED_PROFILE_ID', undefined);
-      commit('SET_ACCOUNTS', []);
-      commit('SET_SELECTED_ACCOUNT_ID', undefined);
+      commit('SET_SELECTED_ACCOUNT', []);
+      commit('SET_SELECTED_BALANCE_CURRENCY', undefined);
     },
 
     setApiKey({commit, dispatch, getters}, apiKey) {
@@ -121,42 +96,11 @@ export default new Vuex.Store({
       .catch(error => console.log(error))
     },
 
-    selectProfile({commit, dispatch}, profileId) {
-      commit('SET_SELECTED_PROFILE_ID', profileId);
-      dispatch('fetchAccounts', profileId);
-    },
-
     fetchAccount({commit}, profileId) {
       transferwise.getAccounts(profileId)
       .then((response) => {
         commit('SET_SELECTED_ACCOUNT', transformAccounts(response));
       })
-    },
-
-    fetchAccounts({commit, dispatch}, profileId) {
-      let accounts = [];
-      transferwise.getAccounts(profileId)
-      .then(response => {
-        accounts = response.data.map((element) => {
-          return {
-            id: element.id,
-            balances: element.balances.map((element) => {
-              return {
-                id: element.id,
-                currency: element.currency,
-                amount: element.amount.value
-              }
-            })
-          }
-        });
-        commit('SET_ACCOUNTS', accounts);
-        dispatch('selectAccount', accounts[0].id);
-      });
-    },
-
-    selectAccount({commit, dispatch}, accountId) {
-      commit('SET_SELECTED_ACCOUNT_ID', accountId);
-      dispatch('clearSelectedBalance');
     },
 
     selectBalanceCurrency({commit}, currency) {
@@ -196,11 +140,12 @@ const transformAccounts = (response) => {
   return response.data.map((account) => {
     return {
       id: account.id,
-      balances: account.balances.map((element) => {
+      profileId: account.profileId,
+      balances: account.balances.map((balance) => {
         return {
-          id: element.id,
-          currency: element.currency,
-          amount: element.amount.value
+          id: balance.id,
+          currency: balance.currency,
+          amount: balance.amount.value
         }
       })
     }

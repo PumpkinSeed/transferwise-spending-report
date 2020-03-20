@@ -45,7 +45,7 @@ export default {
       totalSpending: 'spending/totalSpending',
       selectedBalanceCurrency: 'selectedBalanceCurrency',
       profileId: 'selectedProfileId',
-      accountId: 'selectedAccountId'
+      account: 'selectedAccount'
     }),
     isBalanceSelected() {
       return !!this.selectedBalanceCurrency;
@@ -64,8 +64,8 @@ export default {
       let start = this.formatDate(this.startDate)
       let end = this.formatDate(this.endDate)
       const payload = {
-          profileId: this.profileId,
-          accountId: this.accountId,
+          profileId: this.account.profileId,
+          accountId: this.account.id,
           currency: this.selectedBalanceCurrency,
           start, end
       };
