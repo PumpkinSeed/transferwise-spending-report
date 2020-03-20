@@ -16,7 +16,7 @@
 
       <div class="columns is-centered">
         <div class="column is-half">
-          <SpendingAmount/>
+          <app-spending-amount/>
           <app-spending-category-talbe v-if="!!categories" :categories="categories"/>
         </div>
       </div>
@@ -27,10 +27,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import Datepicker from 'vuejs-datepicker';
 
 import SpendingAmount from "./SpendingAmount.vue";
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
-import Datepicker from 'vuejs-datepicker';
 
 export default {
   data () {
@@ -39,41 +39,42 @@ export default {
       endDate: new Date(),
     }
   },
+
   computed: {
     ...mapGetters({
       categories: 'spending/categories',
-      totalSpending: 'spending/totalSpending',
       selectedBalanceCurrency: 'selectedBalanceCurrency',
     }),
+
     isBalanceSelected() {
       return !!this.selectedBalanceCurrency;
     },
   },
+
   components: {
     Datepicker,
-    SpendingAmount,
+    appSpendingAmount: SpendingAmount,
     appSpendingCategoryTalbe: SpendingCategoryTalbe,
   },
-  props: {
-    msg: String
-  },
+
   methods: {
     ...mapActions({
       setStartDate: 'spending/setStartDate',
-      setEndDate: 'spending/setEndDate'
+      setEndDate: 'spending/setEndDate',
+      fetchStatement: 'spending/fetchStatement'
     }),
 
     onSetTimeRange() {
-      this.setStartDate(this.formatDate(this.startDate));
-      this.setEndDate(this.formatDate(this.endDate));
-      this.$store.dispatch('spending/fetchStatement');
-    },
-
-    formatDate(dateFromPicker) {
-      let date = new Date(dateFromPicker)
-      return date.toISOString()
+      this.setStartDate(formatDate(this.startDate));
+      this.setEndDate(formatDate(this.endDate));
+      this.fetchStatement();
     }
-  },
+  }
+}
+
+
+const formatDate = (date) => {
+  return new Date(date).toISOString();
 }
 </script>
 
