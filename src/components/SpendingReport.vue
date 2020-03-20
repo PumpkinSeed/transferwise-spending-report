@@ -42,8 +42,9 @@ export default {
 
   computed: {
     ...mapGetters({
-      categories: 'spending/categories',
+      categories: 'spending/transactionCategories',
       selectedBalanceCurrency: 'selectedBalanceCurrency',
+      transactions: 'spending/transactions'
     }),
 
     isBalanceSelected() {
@@ -61,13 +62,13 @@ export default {
     ...mapActions({
       setStartDate: 'spending/setStartDate',
       setEndDate: 'spending/setEndDate',
-      fetchStatement: 'spending/fetchStatement'
+      fetchTransactions: 'spending/fetchTransactions'
     }),
 
     onSetTimeRange() {
       this.setStartDate(formatDate(this.startDate));
       this.setEndDate(formatDate(this.endDate));
-      this.fetchStatement();
+      this.fetchTransactions();
     }
   }
 }

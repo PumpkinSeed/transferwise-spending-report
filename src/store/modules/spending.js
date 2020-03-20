@@ -3,7 +3,7 @@ import transferwise from '../../repositories/TransferwiseRepository';
 const state = {
   startDate: undefined,
   endDate: undefined,
-  statement: undefined,
+  transactions: [],
 }
 
 const mutations = {
@@ -16,8 +16,8 @@ const mutations = {
     state.endDate = date;
   },
 
-  'SET_STATEMENT'(state, statement) {
-    state.statement = statement;
+  'SET_TRANSACTIONS'(state, transactions) {
+    state.transactions = transactions;
   }
 
 }
@@ -37,36 +37,29 @@ const getters = {
   },
 
   totalSpending(state) {
-    if (state.statement === undefined){
-      return undefined;
-    }
-    //TODO filter
-    return state.statement.transactions.reduce((acc, cur) => acc + cur.amount.value, 0);
+    return -state.transactions.reduce((acc, cur) => acc + cur.amount.value, 0);
   },
 
-  categories(state) {
-    if (state.statement === undefined){
-      return undefined;
-    }
+  transactions(state) {
+    return state.transactions;
+  },
+
+  transactionCategories(state, getters) {
     const categories = {};
-    let sum = 0;
-    state.statement.transactions.forEach((transaction) => {
-      if (transaction.type === "DEBIT" && transaction.details.type !== "CONVERSION") {
-        if (categories[transaction.details.category] === undefined) {
-          categories[transaction.details.category] = {
-            counter: 1,
-            name: transaction.details.category,
-            amount: transaction.details.amount.value,
-            currency: transaction.details.amount.currency
-          };
-        } else {
-          categories[transaction.details.category].counter++;
-          categories[transaction.details.category].amount += transaction.details.amount.value;
-        }
-        sum += transaction.details.amount.value;
+    state.transactions.forEach((transaction) => {
+      if (categories[transaction.details.category] === undefined) {
+        categories[transaction.details.category] = {
+          counter: 1,
+          name: transaction.details.category,
+          amount: -transaction.amount.value,
+          currency: transaction.amount.currency
+        };
+      } else {
+        categories[transaction.details.category].counter++;
+        categories[transaction.details.category].amount += -transaction.amount.value;
       }
     });
-    Object.values(categories).forEach((category) => category.percent = (category.amount / sum) * 100);
+    Object.values(categories).forEach((category) => category.percent = (category.amount / getters.totalSpending) * 100);
     return categories;
   }
 
@@ -82,20 +75,27 @@ const actions = {
     commit('SET_END_DATE', endDate);
   },
 
-  fetchStatement({commit, getters, rootGetters}) {
+  fetchTransactions({commit, getters, rootGetters}) {
     const profileId = rootGetters.selectedAccount.profileId;
     const accountId = rootGetters.selectedAccount.id;
     const currency = rootGetters.selectedBalanceCurrency;
     const start = getters.startDate;
     const end = getters.endDate;
     transferwise.getStatement(profileId, accountId, currency, start, end)
-    .then((result) => {
-      commit('SET_STATEMENT', result.data);
-    });
-  }
+    .then((response) => {
+      commit('SET_TRANSACTIONS', getSpendingTransactions(response));
+    })
+  },
 
 }
 
 export default {
   state, mutations, getters, actions
+}
+
+const getSpendingTransactions = (response) => {
+  return response.data.transactions
+  .filter((transaction) => {
+    return transaction.type === 'DEBIT' && transaction.details.type !== 'CONVERSION'
+  });
 }
