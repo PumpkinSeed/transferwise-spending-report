@@ -44,7 +44,6 @@ export default {
     ...mapGetters({
       categories: 'spending/transactionCategories',
       selectedBalanceCurrency: 'selectedBalanceCurrency',
-      transactions: 'spending/transactions'
     }),
 
     isBalanceSelected() {
@@ -72,7 +71,6 @@ export default {
     }
   }
 }
-
 
 const formatDate = (date) => {
   return new Date(date).toISOString();

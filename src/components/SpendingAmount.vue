@@ -1,5 +1,6 @@
 <template>
   <div v-if="amount > 1" class="amount-card">
+    spent:
     <money-format :value="amount"  
       :currency-code="currency"
       :subunit-value=true 
@@ -12,24 +13,19 @@
 </template>
 
 <script>
-import MoneyFormat from 'vue-money-format'
+import { mapGetters } from 'vuex';
+import MoneyFormat from 'vue-money-format';
 
 export default {
   name: 'SpendingAmount',
   components: {
-    'money-format': MoneyFormat
+    MoneyFormat
   },
   computed: {
-    amount() {
-      const categories = this.$store.getters.categories;
-      if (!categories) return 0;
-      return Object.values(categories).reduce((acc, cur) => acc + cur.amount, 0);
-    },
-    currency() {
-      const categories = this.$store.getters.categories;
-      if (!categories) return 'EUR';
-      return Object.keys(categories)[0].currency;
-    }
+    ...mapGetters({
+      amount: 'spending/totalSpending',
+      currency: 'selectedBalanceCurrency'
+    })
   },
 }
 </script>
