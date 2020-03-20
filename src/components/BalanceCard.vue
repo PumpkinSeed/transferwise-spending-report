@@ -6,7 +6,6 @@
       :subunit-value=true 
       :hide-subunits=false>
     </money-format>
-    
   </div>
 </template>
 
@@ -14,13 +13,15 @@
 import MoneyFormat from 'vue-money-format'
 
 export default {
-  name: 'AccountCard',
+
   components: {
-    'money-format': MoneyFormat
+    MoneyFormat
   },
+
   props: {
     balance: Object,
-  },
+  }
+
 }
 </script>
 

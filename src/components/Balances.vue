@@ -15,9 +15,11 @@
 import BalanceCard from './BalanceCard.vue';
 
 export default {
+
   components: {
     appBalanceCard: BalanceCard
   },
+
   computed: {
     balances() {
       return this.$store.getters.accountBalances;
@@ -26,6 +28,7 @@ export default {
       return this.$store.getters.selectedBalanceCurrency;
     }
   },
+
   methods: {
     onSelectBalance(index) {
       if (this.balances[index].currency === this.selectedCurency) {
@@ -35,6 +38,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 

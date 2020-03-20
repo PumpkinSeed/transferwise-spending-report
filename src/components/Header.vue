@@ -11,10 +11,10 @@
     <div class="level-item">
       <div class="dropdown is-hoverable" v-if="profiles.length > 0">
         <div class="dropdown-trigger">
-          <button class="button is-info" v-if="selected < 0">select a profile to see account balances</button>
+          <button class="button" v-if="selected < 0">select a profile to see account balances</button>
           <app-profile-card v-else :name="profiles[selected].name" :type="profiles[selected].type"></app-profile-card>
         </div>
-        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+        <div class="dropdown-menu" role="menu">
           <div class="dropdown-content">
             <app-profile-card
               v-for="(profile, index) in profiles" :key="index"
@@ -28,7 +28,6 @@
       </div>
     </div>
 
-
     <div class="level-right">
       <div class="level-item">
         <div class="dropdown is-right" :class="{ 'is-active': showApiDropdown }">
@@ -39,7 +38,7 @@
           </div>
           <div class="dropdown-menu">
             <div class="dropdown-content">
-              <b-input placeholder="API Key" class="api_key" v-model="inputApiKey"></b-input>
+              <b-input class="api-key-input" placeholder="API Key" v-model="inputApiKey"></b-input>
               <div class="level-left">
                 <button class="button" @click="onSetApiKey">set</button>
                 <button class="button" @click="onClearApiKey">clear</button>
@@ -102,14 +101,20 @@ export default {
       this.showApiDropdown = false;
     }
   },
+
   mounted() {
     this.init().then(() => {
       this.inputApiKey = this.apiKey;
     })
   }
+
 }
 </script>
 
-<style>
+<style scoped>
+
+.api-key-input {
+  width: 350px;
+}
 
 </style>

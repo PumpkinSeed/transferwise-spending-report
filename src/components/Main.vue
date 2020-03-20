@@ -14,10 +14,12 @@ import Balances from './Balances.vue';
 import SpendingReport from './SpendingReport.vue'
 
 export default {
+
   components: {
     appBalances: Balances,
     appSpendingReport: SpendingReport
   }
+
 }
 </script>
 

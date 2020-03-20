@@ -1,4 +1,4 @@
-import transferwise from '../../repositories/TransferwiseRepository';
+import api from '../../repositories/TransferwiseRepository';
 
 const state = {
   startDate: undefined,
@@ -7,19 +7,15 @@ const state = {
 }
 
 const mutations = {
-
   'SET_START_DATE'(state, date) {
     state.startDate = date;
   },
-
   'SET_END_DATE'(state, date) {
     state.endDate = date;
   },
-
   'SET_TRANSACTIONS'(state, transactions) {
     state.transactions = transactions;
   }
-
 }
 
 const getters = {
@@ -93,7 +89,7 @@ const actions = {
     const currency = rootGetters.selectedBalanceCurrency;
     const start = getters.startDate;
     const end = getters.endDate;
-    transferwise.getStatement(profileId, accountId, currency, start, end)
+    api.getStatement(profileId, accountId, currency, start, end)
     .then((response) => {
       commit('SET_TRANSACTIONS', getSpendingTransactions(response));
     })

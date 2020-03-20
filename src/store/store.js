@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import transferwise from '../repositories/TransferwiseRepository';
+import api from '../repositories/TransferwiseRepository';
 import spending from './modules/spending';
 
 Vue.use(Vuex);
@@ -55,6 +55,7 @@ export default new Vuex.Store({
   },
 
   actions: {
+
     init({dispatch}) {
       const apiKey = localStorage.getItem('apiKey');
       if (apiKey) {
@@ -79,7 +80,7 @@ export default new Vuex.Store({
         dispatch('clearState');
         commit('SET_API_KEY', apiKey);
         localStorage.setItem('apiKey', apiKey);
-        transferwise.setAuthorization(apiKey);
+        api.setAuthorization(apiKey);
         dispatch('fetchProfiles');
       }
     },
@@ -87,11 +88,11 @@ export default new Vuex.Store({
     removeApiKey({dispatch}) {
       dispatch('clearState');
       localStorage.removeItem('apiKey');
-      transferwise.removeAuthorization();
+      api.removeAuthorization();
     },
 
     fetchProfiles({commit}) {
-      transferwise.getProfiles()
+      api.getProfiles()
       .then(response => {
         commit('SET_PROFILES', transformProfiles(response));
       })
@@ -104,7 +105,7 @@ export default new Vuex.Store({
     },
 
     fetchAccount({commit}, profileId) {
-      transferwise.getAccounts(profileId)
+      api.getAccounts(profileId)
       .then((response) => {
         commit('SET_SELECTED_ACCOUNT', transformAccounts(response));
       })

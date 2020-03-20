@@ -5,6 +5,7 @@ const baseURL = 'https://api.transferwise.com';
 const axiosInstance = axios.create({baseURL});
 
 export default {
+
   setAuthorization(apiKey) {
     axiosInstance.defaults.headers.common['Authorization'] = 'Bearer '+ apiKey;
   },

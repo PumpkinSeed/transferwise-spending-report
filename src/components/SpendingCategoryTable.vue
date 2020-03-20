@@ -29,10 +29,13 @@
 
 <script>
 import MoneyFormat from 'vue-money-format';
+
 export default {
+
   components: {
     MoneyFormat
   },
+
   props: {
     categories: {
       type: Object,

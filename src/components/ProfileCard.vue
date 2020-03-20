@@ -2,22 +2,21 @@
   <div :class="{ 'profile-card-odd' : type === 'business'}" class="profile-card">
     <div class="profile-name">{{ name }}</div>
     <div class="profile-type">{{ type }}</div>
-    
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ProfileCard',
+
   props: {
     type: String,
     name: String,
     isBusiness: Boolean,
   }
+
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .profile-card{
   width: 300px;

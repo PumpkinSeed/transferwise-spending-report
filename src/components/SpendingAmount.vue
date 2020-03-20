@@ -17,20 +17,21 @@ import { mapGetters } from 'vuex';
 import MoneyFormat from 'vue-money-format';
 
 export default {
-  name: 'SpendingAmount',
+
   components: {
     MoneyFormat
   },
+
   computed: {
     ...mapGetters({
       amount: 'spending/totalSpending',
       currency: 'selectedBalanceCurrency'
     })
-  },
+  }
+
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .amount-card{
   width: 600px;

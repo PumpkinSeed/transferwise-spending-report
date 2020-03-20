@@ -33,6 +33,13 @@ import SpendingAmount from "./SpendingAmount.vue";
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
 
 export default {
+
+  components: {
+    Datepicker,
+    appSpendingAmount: SpendingAmount,
+    appSpendingCategoryTalbe: SpendingCategoryTalbe,
+  },
+
   data () {
     return {
       startDate: new Date().setMonth(new Date().getMonth() - 1),
@@ -51,12 +58,6 @@ export default {
     },
   },
 
-  components: {
-    Datepicker,
-    appSpendingAmount: SpendingAmount,
-    appSpendingCategoryTalbe: SpendingCategoryTalbe,
-  },
-
   methods: {
     ...mapActions({
       setStartDate: 'spending/setStartDate',
@@ -70,6 +71,7 @@ export default {
       this.fetchTransactions();
     }
   }
+
 }
 
 const formatDate = (date) => {
