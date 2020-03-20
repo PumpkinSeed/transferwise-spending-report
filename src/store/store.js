@@ -17,6 +17,7 @@ export default new Vuex.Store({
     apiKey: undefined,
     profiles: [],
     selectedProfileId: undefined,
+    selectedAccount: undefined,
     accounts: [],
     selectedAccountId: undefined,
     selectedBalanceCurrency: undefined,
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     selectedProfileId(state) {
       return state.selectedProfileId;
+    },
+    account(state) {
+      return state.selectedAccount;
     },
     accounts(state) {
       return state.accounts;
@@ -60,6 +64,9 @@ export default new Vuex.Store({
     'SET_SELECTED_PROFILE_ID' (state, profileId) {
       state.selectedProfileId = profileId;
     },
+    'SET_SELECTED_ACCOUNT' (state, account) {
+      state.selectedAccount = account;
+    },
     'SET_ACCOUNTS' (state, accounts) {
       state.accounts = accounts;
     },
@@ -77,6 +84,14 @@ export default new Vuex.Store({
       if (apiKey) {
         dispatch('setApiKey', apiKey);
       }
+    },
+
+    clearState({commit}) {
+      commit('SET_API_KEY', undefined);
+      commit('SET_PROFILES', []);
+      commit('SET_SELECTED_PROFILE_ID', undefined);
+      commit('SET_ACCOUNTS', []);
+      commit('SET_SELECTED_ACCOUNT_ID', undefined);
     },
 
     setApiKey({commit, dispatch, getters}, apiKey) {
@@ -98,35 +113,10 @@ export default new Vuex.Store({
       transferwise.removeAuthorization();
     },
 
-    clearState({commit}) {
-      commit('SET_API_KEY', undefined);
-      commit('SET_PROFILES', []);
-      commit('SET_SELECTED_PROFILE_ID', undefined);
-      commit('SET_ACCOUNTS', []);
-      commit('SET_SELECTED_ACCOUNT_ID', undefined);
-    },
-
     fetchProfiles({commit}) {
-      const profiles = [];
       transferwise.getProfiles()
       .then(response => {
-        response.data.forEach(element => {
-          let profile = {
-            id: element.id,
-            type: element.type
-          };
-          profile.isBusiness = element.type == "business";
-
-          if (profile.type === "personal") {
-            profile.name = element.details.firstName
-            profile.name += ' '
-            profile.name += element.details.lastName
-          } else if (profile.type === "business") {
-            profile.name = element.details.name
-          }
-          profiles.push(profile);
-        });
-        commit('SET_PROFILES', profiles);
+        commit('SET_PROFILES', transformProfiles(response));
       })
       .catch(error => console.log(error))
     },
@@ -134,6 +124,13 @@ export default new Vuex.Store({
     selectProfile({commit, dispatch}, profileId) {
       commit('SET_SELECTED_PROFILE_ID', profileId);
       dispatch('fetchAccounts', profileId);
+    },
+
+    fetchAccount({commit}, profileId) {
+      transferwise.getAccounts(profileId)
+      .then((response) => {
+        commit('SET_SELECTED_ACCOUNT', transformAccounts(response));
+      })
     },
 
     fetchAccounts({commit, dispatch}, profileId) {
@@ -172,3 +169,40 @@ export default new Vuex.Store({
 
   }
 });
+
+const transformProfiles = (response) => {
+  const profiles = [];
+  response.data.forEach(element => {
+    let profile = {
+      id: element.id,
+      type: element.type
+    };
+    profile.isBusiness = element.type == "business";
+
+    if (profile.type === "personal") {
+      profile.name = element.details.firstName
+      profile.name += ' '
+      profile.name += element.details.lastName
+    } else if (profile.type === "business") {
+      profile.name = element.details.name
+    }
+    profiles.push(profile);
+  });
+  return profiles;
+};
+
+const transformAccounts = (response) => {
+  if (response.data.length < 1) return undefined;
+  return response.data.map((account) => {
+    return {
+      id: account.id,
+      balances: account.balances.map((element) => {
+        return {
+          id: element.id,
+          currency: element.currency,
+          amount: element.amount.value
+        }
+      })
+    }
+  })[0];
+}
