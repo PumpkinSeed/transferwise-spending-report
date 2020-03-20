@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Balances from './Balances.vue';
-import SpendingReport from './SpendingReport.vue'
+import Balances from './balances/Balances.vue';
+import SpendingReport from './spending-report/SpendingReport.vue'
 
 export default {
 
