@@ -59,14 +59,16 @@ export default new Vuex.Store({
       const apiKey = localStorage.getItem('apiKey');
       if (apiKey) {
         dispatch('setApiKey', apiKey);
+        dispatch('spending/init');
       }
     },
 
-    clearState({commit}) {
+    clearState({commit, dispatch}) {
       commit('SET_API_KEY', undefined);
       commit('SET_PROFILES', []);
       commit('SET_SELECTED_ACCOUNT', []);
       commit('SET_SELECTED_BALANCE_CURRENCY', undefined);
+      dispatch('spending/clearState');
     },
 
     setApiKey({commit, dispatch, getters}, apiKey) {
@@ -96,6 +98,11 @@ export default new Vuex.Store({
       .catch(error => console.log(error))
     },
 
+    selectProfile({dispatch}, profileId) {
+      dispatch('fetchAccount', profileId);
+      dispatch('clearSelectedBalance');
+    },
+
     fetchAccount({commit}, profileId) {
       transferwise.getAccounts(profileId)
       .then((response) => {
@@ -103,12 +110,14 @@ export default new Vuex.Store({
       })
     },
 
-    selectBalanceCurrency({commit}, currency) {
+    selectBalanceCurrency({commit, dispatch}, currency) {
       commit('SET_SELECTED_BALANCE_CURRENCY', currency);
+      dispatch('spending/fetchTransactions');
     },
 
     clearSelectedBalance({commit}) {
       commit('SET_SELECTED_BALANCE_CURRENCY', undefined);
+      this.dispatch('spending/clearTransactions');
     },
 
   }

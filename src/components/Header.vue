@@ -84,13 +84,13 @@ export default {
   methods: {
     ...mapActions({
       init: 'init',
-      fetchAccount: 'fetchAccount',
+      selectProfile: 'selectProfile',
       setApiKey: 'setApiKey',
       removeApiKey: 'removeApiKey'
     }),
     onSelectProfile(index) {
       this.selected = index;
-      this.fetchAccount(this.profiles[this.selected].id);
+      this.selectProfile(this.profiles[this.selected].id);
     },
     onSetApiKey() {
       this.setApiKey(this.inputApiKey);

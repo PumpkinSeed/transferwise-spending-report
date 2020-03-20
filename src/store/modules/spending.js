@@ -68,6 +68,17 @@ const getters = {
 
 const actions = {
 
+  init({dispatch}) {
+    dispatch('setStartDate', new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString());
+    dispatch('setEndDate', new Date().toISOString());
+  },
+
+  clearState({commit}) {
+    commit('SET_START_DATE', undefined);
+    commit('SET_END_DATE', undefined);
+    commit('SET_TRANSACTIONS', []);
+  },
+
   setStartDate({commit}, startDate) {
     commit('SET_START_DATE', startDate);
   },
@@ -87,6 +98,10 @@ const actions = {
       commit('SET_TRANSACTIONS', getSpendingTransactions(response));
     })
   },
+
+  clearTransactions({commit}) {
+    commit('SET_TRANSACTIONS', []);
+  }
 
 }
 
