@@ -45,6 +45,7 @@ const getters = {
   },
 
   transactionCategories(state, getters) {
+    if (state.transactions.length < 1) return undefined;
     const categories = {};
     state.transactions.forEach((transaction) => {
       if (categories[transaction.details.category] === undefined) {
