@@ -16,7 +16,6 @@
 
       <div class="columns is-centered">
         <div class="column is-half">
-          <app-pie-chart v-if="!!categories" :categories="categories"></app-pie-chart>
           <app-spending-amount/>
           <app-spending-category-talbe v-if="!!categories" :categories="categories"/>
         </div>
@@ -32,7 +31,6 @@ import Datepicker from 'vuejs-datepicker';
 
 import SpendingAmount from "./SpendingAmount.vue";
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
-import PieChart from './PieChart';
 
 export default {
 
@@ -40,7 +38,6 @@ export default {
     Datepicker,
     appSpendingAmount: SpendingAmount,
     appSpendingCategoryTalbe: SpendingCategoryTalbe,
-    appPieChart: PieChart
   },
 
   data () {
