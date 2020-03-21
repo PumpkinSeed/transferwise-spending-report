@@ -16,6 +16,7 @@
 
       <div class="columns is-centered">
         <div class="column is-half">
+          <app-donut-chart v-if="!!categories"></app-donut-chart>
           <app-spending-amount/>
           <app-spending-category-talbe v-if="!!categories" :categories="categories"/>
         </div>
@@ -31,6 +32,7 @@ import Datepicker from 'vuejs-datepicker';
 
 import SpendingAmount from "./SpendingAmount.vue";
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
+import DonutChart from './DonutChart.vue';
 
 export default {
 
@@ -38,6 +40,7 @@ export default {
     Datepicker,
     appSpendingAmount: SpendingAmount,
     appSpendingCategoryTalbe: SpendingCategoryTalbe,
+    appDonutChart: DonutChart
   },
 
   data () {
