@@ -1,56 +1,55 @@
 <template>
-
-  <nav class="level">
-
-    <div class="level-left">
+  <div class="d-flex row justify-space-between align-center">
+    
+    <!-- <div class="level-left">
       <div class="level-item">
-        <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+        <img src="@/assets/tw_fast_flag_blue_rgb.svg" width="112" height="28">
       </div>
-    </div>
+    </div> -->
 
-    <div class="level-item">
-      <div class="dropdown is-hoverable" v-if="profiles.length > 0">
-        <div class="dropdown-trigger">
-          <button class="button" v-if="selected < 0">select a profile to see account balances</button>
-          <app-profile-card v-else :name="profiles[selected].name" :type="profiles[selected].type"></app-profile-card>
-        </div>
-        <div class="dropdown-menu" role="menu">
-          <div class="dropdown-content">
-            <app-profile-card
-              v-for="(profile, index) in profiles" :key="index"
-              :name="profile.name" :type="profile.type"
-              @click.native="onSelectProfile(index)"/>
-          </div>
-        </div>
-      </div>
-      <div v-else>
-        <p>add api key to see your profiles</p>
-      </div>
-    </div>
-
-    <div class="level-right">
-      <div class="level-item">
-        <div class="dropdown is-right" :class="{ 'is-active': showApiDropdown }">
-          <div class="dropdown-trigger">
-            <button class="button" @click="showApiDropdown = !showApiDropdown">
-              <span>api key</span>
-            </button>
-          </div>
-          <div class="dropdown-menu">
-            <div class="dropdown-content">
-              <b-input class="api-key-input" placeholder="API Key" v-model="inputApiKey"></b-input>
-              <div class="level-left">
-                <button class="button" @click="onSetApiKey">set</button>
-                <button class="button" @click="onClearApiKey">clear</button>
-              </div>
+    <div>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn text color="white" v-on="on" class="text-capitalize">
+            <span v-if="selected < 0">select a profile</span>
+            <div v-else>
+              <span>{{ profiles[selected].name }} </span>
+              <span>{{ profiles[selected].type }}</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(profile, index) in profiles" :key="index">
+              <app-profile-card
+                elevation="14"
+                :name="profile.name" :type="profile.type"
+                @click.native="onSelectProfile(index)"/>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
 
-  </nav>
+    <div>
+      <v-menu offset-y :close-on-content-click="false">
+        <template v-slot:activator="{ on }">
+          <v-btn text color="white" class="text-capitalize" v-on="on">
+            API key
+          </v-btn>
+        </template>
+        <v-card>
+                <v-text-field class="api-key-input" placeholder="API Key" v-model="inputApiKey"></v-text-field>
+                <div class="level-left">
+                  <v-btn text @click="onSetApiKey">set</v-btn>
+                  <v-btn text @click="onClearApiKey">clear</v-btn>
+                </div>
+        </v-card>
+      </v-menu>
+    </div>
 
+
+
+
+  </div>
 </template>
 
 <script>
@@ -74,8 +73,6 @@ export default {
   data() {
     return {
       selected: -1,
-      // TODO close api dropdown when clicking away
-      showApiDropdown: false,
       inputApiKey: ''
     }
   },
@@ -93,12 +90,10 @@ export default {
     },
     onSetApiKey() {
       this.setApiKey(this.inputApiKey);
-      this.showApiDropdown = false;
     },
     onClearApiKey() {
       this.inputApiKey = '';
       this.removeApiKey();
-      this.showApiDropdown = false;
     }
   },
 
