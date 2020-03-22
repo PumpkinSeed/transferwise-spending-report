@@ -1,0 +1,8 @@
+{
+  "Groceries": ["grocery", "store", "supermarket"],
+  "Eating": ["fast-food", "restaurant", "eating", "bar", "lounge", "bakery", "bakeries", "caterer", "service-station"],
+  "Entertainment": ["entertainment", "motion-picture", "theater", "club", "membership"],
+  "Withdraw": ["department-store", "member-financial-institute"],
+  "Transport": ["bus-line", "automobile", "parking", "garage"],
+  "Services": ["cable", "satellite"]
+}

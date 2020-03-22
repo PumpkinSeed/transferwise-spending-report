@@ -1,4 +1,6 @@
 import api from '../../repositories/TransferwiseRepository';
+import jsonCategories from '../../assets/spending-categories.json';
+import slugify from 'slugify';
 
 const state = {
   startDate: undefined,
@@ -42,18 +44,22 @@ const getters = {
 
   transactionCategories(state, getters) {
     if (state.transactions.length < 1) return undefined;
+    state.transactions.forEach((transaction) => {
+      console.log(getSpendingCategory(transaction.details.category));
+    });
     const categories = {};
     state.transactions.forEach((transaction) => {
-      if (categories[transaction.details.category] === undefined) {
-        categories[transaction.details.category] = {
+      const spendingCategory = getSpendingCategory(transaction.details.category);
+      if (categories[spendingCategory] === undefined) {
+        categories[spendingCategory] = {
           counter: 1,
-          name: transaction.details.category,
+          name: spendingCategory,
           amount: -transaction.amount.value,
           currency: transaction.amount.currency
         };
       } else {
-        categories[transaction.details.category].counter++;
-        categories[transaction.details.category].amount += -transaction.amount.value;
+        categories[spendingCategory].counter++;
+        categories[spendingCategory].amount += -transaction.amount.value;
       }
     });
     Object.values(categories).forEach((category) => category.percent = (category.amount / getters.totalSpending) * 100);
@@ -110,4 +116,16 @@ const getSpendingTransactions = (response) => {
   .filter((transaction) => {
     return transaction.type === 'DEBIT' && transaction.details.type !== 'CONVERSION'
   });
+}
+
+const getSpendingCategory = (str) => {
+  str = slugify(str, {lower: true, strict: true})
+  for (const entry of Object.entries(jsonCategories)) {
+    for(const text of entry[1]) {
+      if (str.indexOf(text) >= 0) {
+        return entry[0];
+      }
+    }
+  }
+  return 'Other';
 }
