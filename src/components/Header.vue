@@ -8,6 +8,12 @@
     </div> -->
 
     <div>
+      <v-btn @click="setNavDrawerOpen(!isNavDrawerOpen)">
+        {{isNavDrawerOpen ? 'close menu' : 'open menu'}}
+      </v-btn>
+    </div>
+
+    <div>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn text color="white" v-on="on" class="text-capitalize">
@@ -46,9 +52,6 @@
       </v-menu>
     </div>
 
-
-
-
   </div>
 </template>
 
@@ -65,6 +68,7 @@ export default {
 
   computed: {
     ...mapGetters({
+      isNavDrawerOpen: 'isNavDrawerOpen',
       profiles: 'profiles',
       apiKey: 'apiKey'
     })
@@ -79,6 +83,7 @@ export default {
 
   methods: {
     ...mapActions({
+      setNavDrawerOpen: 'setNavDrawerOpen',
       init: 'init',
       selectProfile: 'selectProfile',
       setApiKey: 'setApiKey',

@@ -14,6 +14,7 @@ export default new Vuex.Store({
   },
 
   state: {
+    navDrawerOpen: false,
     apiKey: undefined,
     profiles: [],
     selectedAccount: undefined,
@@ -21,6 +22,9 @@ export default new Vuex.Store({
   },
 
   getters: {
+    isNavDrawerOpen(state) {
+      return state.navDrawerOpen;
+    },
     apiKey(state) {
       return state.apiKey;
     },
@@ -40,6 +44,9 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    'SET_NAV_DRAWER_OPEN' (state, setOpen) {
+      state.navDrawerOpen = setOpen;
+    },
     'SET_API_KEY' (state, apiKey) {
       state.apiKey = apiKey;
     },
@@ -55,6 +62,10 @@ export default new Vuex.Store({
   },
 
   actions: {
+
+    setNavDrawerOpen({commit}, setOpen) {
+      commit('SET_NAV_DRAWER_OPEN', setOpen);
+    },
 
     init({dispatch}) {
       const apiKey = localStorage.getItem('apiKey');
