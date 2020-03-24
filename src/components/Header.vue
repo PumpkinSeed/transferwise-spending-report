@@ -1,38 +1,16 @@
 <template>
   <div class="d-flex row justify-space-between align-center">
-    
-    <!-- <div class="level-left">
-      <div class="level-item">
-        <img src="@/assets/tw_fast_flag_blue_rgb.svg" width="112" height="28">
-      </div>
-    </div> -->
 
     <div>
-      <v-btn @click="setNavDrawerOpen(!isNavDrawerOpen)">
-        {{isNavDrawerOpen ? 'close menu' : 'open menu'}}
+      <v-btn dark icon @click="setNavDrawerOpen(!isNavDrawerOpen)">
+        <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
     </div>
 
-    <div>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn text color="white" v-on="on" class="text-capitalize">
-            <span v-if="selected < 0">select a profile</span>
-            <div v-else>
-              <span>{{ profiles[selected].name }} </span>
-              <span>{{ profiles[selected].type }}</span>
-            </div>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="(profile, index) in profiles" :key="index">
-              <app-profile-card
-                elevation="14"
-                :name="profile.name" :type="profile.type"
-                @click.native="onSelectProfile(index)"/>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+    <div class="level-left">
+      <div class="level-item">
+        <img src="@/assets/tw_fast_flag_blue_rgb.svg" width="112" height="28">
+      </div>
     </div>
 
     <div>
@@ -57,26 +35,19 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import ProfileCard from './ProfileCard.vue';
 
 export default {
   name: 'Header',
 
-  components: {
-    appProfileCard: ProfileCard
-  },
-
   computed: {
     ...mapGetters({
       isNavDrawerOpen: 'isNavDrawerOpen',
-      profiles: 'profiles',
       apiKey: 'apiKey'
     })
   },
 
   data() {
     return {
-      selected: -1,
       inputApiKey: ''
     }
   },
@@ -85,7 +56,6 @@ export default {
     ...mapActions({
       setNavDrawerOpen: 'setNavDrawerOpen',
       init: 'init',
-      selectProfile: 'selectProfile',
       setApiKey: 'setApiKey',
       removeApiKey: 'removeApiKey'
     }),
