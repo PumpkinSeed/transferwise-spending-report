@@ -1,8 +1,18 @@
 <template>
-  <div :class="{ 'profile-card-odd' : type === 'business'}" class="profile-card">
-    <div class="profile-name">{{ name }}</div>
-    <div class="profile-type">{{ type }}</div>
-  </div>
+    <v-hover>
+      <template v-slot="{ hover }">
+
+        <v-card
+          class="ma-2 profile-card"
+          :color="isBusiness ? 'secondary accent--text' : 'accent secondary--text'"
+          :elevation="hover ? 16 : baseElevation"
+        >
+          <v-card-title>{{ name }}</v-card-title>
+          <v-card-subtitle :class="isBusiness ? 'accent--text' : 'secondary--text'">{{ type }}</v-card-subtitle>
+        </v-card>
+
+      </template>
+    </v-hover>
 </template>
 
 <script>
@@ -12,31 +22,23 @@ export default {
     type: String,
     name: String,
     isBusiness: Boolean,
+    isSelected: Boolean,
+  },
+
+  computed: {
+    baseElevation() {
+      return this.isSelected ? 16 : 0;
+    }
   }
 
 }
 </script>
 
 <style scoped>
+
 .profile-card{
   width: 300px;
-  margin: 10px;
-  border-radius: 5px;
-  color: rgb(37, 54, 85);
-  background: rgb(255, 182, 25);
-  padding: 10px;
   cursor: pointer;
 }
-.profile-card-odd {
-  color: rgb(255, 182, 25);
-  background: rgb(37, 54, 85);
-}
-.profile-name{
-  text-align: left;
-  font-size: 22px;
-}
-.profile-type{
-  text-align: left;
-  font-size: 15px;
-}
+
 </style>
