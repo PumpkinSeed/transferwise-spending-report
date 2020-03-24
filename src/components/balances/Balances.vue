@@ -5,7 +5,7 @@
         class="border"
         :class="{ 'selected-border': selectedCurency === balance.currency }"
         v-for="(balance, index) in balances" :key="index"
-        :balance="balance"
+        :balance="balance" :isSelected="selectedCurency === balance.currency"
         @click.native="onSelectBalance(index)"/>
     </div>
   </div>

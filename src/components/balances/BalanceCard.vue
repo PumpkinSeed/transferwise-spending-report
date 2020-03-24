@@ -1,12 +1,34 @@
 <template>
-  <div class="balance-card">
+
+
+  <v-hover>
+    <template v-slot="{ hover }">
+
+      <v-card
+        class="ma-2 balance-card borderless"
+        :elevation="hover ? 16 : baseElevation"
+      >
+        <v-card-title>{{ balance.currency }}</v-card-title>
+        <v-card-subtitle>
+          <money-format :value="balance.amount" 
+            :currency-code="balance.currency"
+            :subunit-value=true 
+            :hide-subunits=false>
+          </money-format>
+        </v-card-subtitle>
+      </v-card>
+
+    </template>
+  </v-hover>
+
+  <!-- <div class="balance-card">
     <div class="balance-currency">{{ balance.currency }}</div>
     <money-format :value="balance.amount" 
       :currency-code="balance.currency"
       :subunit-value=true 
       :hide-subunits=false>
     </money-format>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -20,6 +42,13 @@ export default {
 
   props: {
     balance: Object,
+    isSelected: Boolean
+  },
+
+  computed: {
+    baseElevation() {
+      return this.isSelected ? 16 : 0;
+    }
   }
 
 }
@@ -28,11 +57,6 @@ export default {
 <style scoped>
 .balance-card {
   width: 170px;
-  margin: 10px;
-  border-radius: 5px;
-  color: rgb(37, 54, 85);
-  background: rgb(68, 238, 112);
-  padding: 10px;
   cursor: pointer;
 }
 .balance-currency {

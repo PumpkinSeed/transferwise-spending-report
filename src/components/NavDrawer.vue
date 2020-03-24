@@ -10,21 +10,27 @@
 
       <v-divider></v-divider>
 
-      <v-list dense>
+      <!-- <v-list dense>
         <v-list-item>dickbutt</v-list-item>
-      </v-list>
+      </v-list> -->
+
+      <app-balances></app-balances>
+
     </v-navigation-drawer>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-import ProfileCard from './ProfileCard.vue'
+import ProfileCard from './ProfileCard.vue';
+import Balances from './balances/Balances.vue';
+
 
 export default {
   
   components: {
-    appProfileCard: ProfileCard
+    appProfileCard: ProfileCard,
+    appBalances: Balances
   },
 
   computed: {

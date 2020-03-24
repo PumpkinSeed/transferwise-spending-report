@@ -10,6 +10,7 @@ export default new Vuetify({
         primary: '#37517e', // TW navy
         secondary: '#5d7079', // slate grey
         accent: '#FFB619', // TW amber
+        borderless: '#44EE70', // Borderless green
       }
     }
   }
