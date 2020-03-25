@@ -7,7 +7,7 @@
         <div>
           <div class="d-flex align-center" v-for="legend in legendData" :key="legend.name">
             <div class="legend-dot" :style="{ backgroundColor: legend.color }"></div>
-            <span>{{ legend.name }}</span>
+            <span class="legend-text">{{ legend.name }}</span>
           </div>
         </div>
       </div>
@@ -83,6 +83,10 @@ export default {
   height: 14px;
   border-radius: 50%;
   margin-right: 2px;
+}
+
+.legend-text {
+  font-size: smaller;
 }
 
 </style>
