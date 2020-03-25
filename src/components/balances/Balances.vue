@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="columns is-mobile is-multiline is-centered">
+    <div class="d-flex flex-column align-center mt-2">
       <app-balance-card
         class="border"
         :class="{ 'selected-border': selectedCurency === balance.currency }"

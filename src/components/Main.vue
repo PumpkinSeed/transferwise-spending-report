@@ -1,8 +1,6 @@
 <template>
   <div>
-    <section class="section">
-      <app-spending-report/>
-    </section>
+    <app-spending-report/>
     <app-nav></app-nav>
   </div>
 </template>

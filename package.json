@@ -10,8 +10,6 @@
   "dependencies": {
     "apexcharts": "^3.17.0",
     "axios": "^0.19.2",
-    "buefy": "^0.8.12",
-    "bulma": "^0.8.0",
     "core-js": "^3.6.4",
     "slugify": "^1.4.0",
     "vue": "^2.6.11",
