@@ -27,7 +27,7 @@
             <app-donut-chart v-if="!!categories"></app-donut-chart>
           </v-tab-item>
           <v-tab-item>
-            <app-spending-category-talbe v-if="!!categories" :categories="categories"/>
+            <app-spending-category-talbe v-if="!!categories"/>
           </v-tab-item>
         </v-tabs-items>
       </div>
