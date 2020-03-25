@@ -14,23 +14,26 @@
         <app-spending-amount/>
       </div> -->
 
-      <div>
-        <v-tabs v-model="tab">
-          <v-tab>pie chart</v-tab>
-          <v-tab>category table</v-tab>
-        </v-tabs>   
+      <div class="app-tabs">
+        <div>
+          <v-tabs grow v-model="tab">
+            <v-tab>pie chart</v-tab>
+            <v-tab>category table</v-tab>
+          </v-tabs>   
+        </div>
+
+        <div>
+          <v-tabs-items v-model="tab">
+            <v-tab-item>
+              <app-donut-chart v-if="!!categories"></app-donut-chart>
+            </v-tab-item>
+            <v-tab-item>
+              <app-spending-category-talbe v-if="!!categories"/>
+            </v-tab-item>
+          </v-tabs-items>
+        </div>
       </div>
 
-      <div>
-        <v-tabs-items v-model="tab">
-          <v-tab-item>
-            <app-donut-chart v-if="!!categories"></app-donut-chart>
-          </v-tab-item>
-          <v-tab-item>
-            <app-spending-category-talbe v-if="!!categories"/>
-          </v-tab-item>
-        </v-tabs-items>
-      </div>
     </div>
 
   </div>
@@ -74,5 +77,9 @@ export default {
 </script>
 
 <style>
+
+.app-tabs {
+  width: 600px;
+}
 
 </style>
