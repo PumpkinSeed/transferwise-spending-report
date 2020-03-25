@@ -4,12 +4,6 @@
         <apexchart width="350" type="donut" :options="options" :series="series"></apexchart>
       </div>
       <div>
-        <!-- <v-list dense>
-          <v-list-item class="pa-0" v-for="legend in legendData" :key="legend.name">
-            <div class="legend-dot" :style="{ backgroundColor: legend.color}"></div>
-            <span>{{ legend.name }}</span>
-          </v-list-item>
-        </v-list> -->
         <div>
           <div class="d-flex align-center" v-for="legend in legendData" :key="legend.name">
             <div class="legend-dot" :style="{ backgroundColor: legend.color }"></div>
