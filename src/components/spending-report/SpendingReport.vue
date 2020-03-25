@@ -2,9 +2,11 @@
   <div>
     <div v-if="!isBalanceSelected">
       <h1>pick one of your balances to see spending</h1>
+      <app-time-range-pick></app-time-range-pick>
     </div>
 
     <div v-else>
+
 
       <div class="columns is-centered">
         <div class="column is-half">
@@ -33,6 +35,7 @@ import Datepicker from 'vuejs-datepicker';
 import SpendingAmount from "./SpendingAmount.vue";
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
 import DonutChart from './DonutChart.vue';
+import TimeRangePick from './TimeRangePick.vue';
 
 export default {
 
@@ -40,7 +43,8 @@ export default {
     Datepicker,
     appSpendingAmount: SpendingAmount,
     appSpendingCategoryTalbe: SpendingCategoryTalbe,
-    appDonutChart: DonutChart
+    appDonutChart: DonutChart,
+    appTimeRangePick: TimeRangePick
   },
 
   data () {
