@@ -6,6 +6,7 @@
       :items="categoriesForTable"
       :disable-pagination="true"
       :hide-default-footer="true"
+      @click:row="onClickRow"
       class="elevation-1"
     >
       <template v-slot:item.amount="{ item }">
@@ -16,13 +17,27 @@
       </template>
     </v-data-table>
 
+  <div class="text-center">
+    <v-dialog v-model="dialogOpen" width="800">
+      <v-card>
+        <app-transactions-list :category="selectedCategory"></app-transactions-list>
+      </v-card>
+    </v-dialog>
+  </div>
+
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import TransactionsList from './TransactionsList.vue';
+
 export default {
+
+  components: {
+    appTransactionsList: TransactionsList
+  },
 
   computed: {
     ...mapGetters({
@@ -54,6 +69,15 @@ export default {
         { text: 'num of times', value: 'counter' },
         { text: 'spending %', value: 'percent' },
       ],
+      dialogOpen: false,
+      selectedCategory: undefined
+    }
+  },
+
+  methods: {
+    onClickRow(category) {
+      this.dialogOpen = true;
+      this.selectedCategory = category.name;
     }
   }
 
