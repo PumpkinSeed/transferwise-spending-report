@@ -42,14 +42,32 @@ const getters = {
     return state.transactions;
   },
 
+  filteredTransactions(state) {
+    return (filterOptions) => {
+      if (!filterOptions) return state.transactions;
+      return state.transactions.filter((transaction) => {
+        let checkStartDate = true;
+        let checkEndDate = true;
+        let checkCategory = true;
+        if (filterOptions.startDate) {
+          checkStartDate = new Date(transaction.date).getTime() >= new Date(filterOptions.startDate).getTime();
+        }
+        if (filterOptions.endDate) {
+          checkEndDate = new Date(transaction.date).getTime() <= new Date(filterOptions.checkEndDate).getTime();
+        }
+        if (filterOptions.category) {
+          checkCategory = transaction.category === filterOptions.category;
+        }
+        return checkStartDate && checkEndDate && checkCategory;
+      });
+    }
+  },
+
   transactionCategories(state, getters) {
     if (state.transactions.length < 1) return undefined;
-    state.transactions.forEach((transaction) => {
-      console.log(getSpendingCategory(transaction.details.category));
-    });
     const categories = {};
     state.transactions.forEach((transaction) => {
-      const spendingCategory = getSpendingCategory(transaction.details.category);
+      const spendingCategory = transaction.category;
       if (categories[spendingCategory] === undefined) {
         categories[spendingCategory] = {
           counter: 1,
@@ -115,6 +133,14 @@ const getSpendingTransactions = (response) => {
   return response.data.transactions
   .filter((transaction) => {
     return transaction.type === 'DEBIT' && transaction.details.type !== 'CONVERSION'
+  })
+  .map((transaction) => {
+    if (!!transaction.details.category && typeof transaction.details.category === 'string') {
+      transaction.category = getSpendingCategory(transaction.details.category);
+    } else {
+      transaction.category = 'other';
+    }
+    return transaction;
   });
 }
 

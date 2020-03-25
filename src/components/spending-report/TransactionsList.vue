@@ -21,10 +21,10 @@ export default {
 
   computed: {
     ...mapGetters({
-      transactions: 'spending/transactions'
+      transactions: 'spending/filteredTransactions'
     }),
     transactionsForTable() {
-      return this.transactions.map((transaction) => {
+      return this.transactions({category: this.category}).map((transaction) => {
         const location = `${transaction.details.merchant.city} ${transaction.details.merchant.country}`;
         return {
           date: transaction.date,
@@ -57,11 +57,7 @@ export default {
         { text: 'location', value: 'location' },
       ],
     }
-  },
-
-   mounted() {
-     console.log(this.transactions);
-   }
+  }
 
 }
 </script>
