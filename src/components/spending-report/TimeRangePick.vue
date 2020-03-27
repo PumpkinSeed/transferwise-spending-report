@@ -62,8 +62,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      startDate: 'startDate',
-      endDate: 'endDate'
+      startDate: 'spending/startDate',
+      endDate: 'spending/endDate'
     })
   },
 
@@ -91,10 +91,18 @@ export default {
     formatDate(date) {
       return new Date(date).toISOString();
     }
+  },
+
+  mounted() {
+    if (this.startDate) {
+      this.dateFrom = this.startDate.substr(0, 10);
+    }
+    if (this.endDate) {
+      this.dateTo = this.endDate.substr(0, 10);
+    }
   }
 
 }
-
 
 </script>
 

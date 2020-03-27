@@ -1,11 +1,29 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VuexPersistence from 'vuex-persist';
 import api from '../repositories/TransferwiseRepository';
 import spending from './modules/spending';
 
 Vue.use(Vuex);
 
+const vuexSessionPersist = new VuexPersistence({
+  storage: window.sessionStorage,
+  reducer: (state) => ({
+    navDrawerOpen: state.navDrawerOpen,
+    profiles: state.profiles,
+    selectedAccount: state.selectedAccount,
+    selectedBalanceCurrency: state.selectedBalanceCurrency,
+    spending: state.spending
+  })
+});
+
+const vuexApiPersist = new VuexPersistence({
+  storage: window.localStorage,
+  reducer: (state) => ({apiKey: state.apiKey})
+})
+
 export default new Vuex.Store({
+  plugins: [vuexSessionPersist.plugin, vuexApiPersist.plugin],
   modules: {
     spending: {
       namespaced: true,
@@ -67,11 +85,9 @@ export default new Vuex.Store({
       commit('SET_NAV_DRAWER_OPEN', setOpen);
     },
 
-    init({dispatch}) {
-      const apiKey = localStorage.getItem('apiKey');
-      if (apiKey) {
-        dispatch('setApiKey', apiKey);
-        dispatch('spending/init');
+    init({getters}) {
+      if (getters.apiKey) {
+        api.setAuthorization(getters.apiKey);
       }
     },
 
@@ -86,11 +102,9 @@ export default new Vuex.Store({
     setApiKey({commit, dispatch, getters}, apiKey) {
       if (!apiKey || apiKey === '') {
         dispatch('clearState');
-        localStorage.removeItem('apiKey');
       } else if (apiKey !== getters.apiKey) {
         dispatch('clearState');
         commit('SET_API_KEY', apiKey);
-        localStorage.setItem('apiKey', apiKey);
         api.setAuthorization(apiKey);
         dispatch('fetchProfiles');
       }
@@ -98,7 +112,6 @@ export default new Vuex.Store({
 
     removeApiKey({dispatch}) {
       dispatch('clearState');
-      localStorage.removeItem('apiKey');
       api.removeAuthorization();
     },
 

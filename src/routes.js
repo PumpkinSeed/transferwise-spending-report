@@ -1,6 +1,6 @@
 import Main from './components/Main.vue';
 
-export const routes = [
+export const Routes = [
   {
     path: '', component: Main
   }
