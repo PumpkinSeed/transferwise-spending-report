@@ -1,16 +1,13 @@
 <template>
-  <div>
-    <div class="d-flex flex-column align-center mt-2">
+  <div class="d-flex flex-column align-center mt-2">
+    <v-scroll-y-transition group appear>
       <app-balance-card
         v-for="(balance, index) in balances" :key="index"
         class="border"
         :class="{ 'selected-border': selectedCurency === balance.currency }"
         :balance="balance" :isSelected="selectedCurency === balance.currency"
         @click.native="onSelectBalance(index)"/>
-        <div v-if="!balances" class="mt-2">
-          <h4>Select an account to see balances.</h4>
-        </div>
-    </div>
+    </v-scroll-y-transition>
   </div>
 </template>
 

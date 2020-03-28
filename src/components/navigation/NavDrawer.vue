@@ -17,8 +17,6 @@
         <app-profiles></app-profiles>
       </div>
 
-      <v-divider v-if="profiles.length !== 0"></v-divider>
-
       <div v-if="profiles.length !== 0">
         <app-balances></app-balances>
       </div>
