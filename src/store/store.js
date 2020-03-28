@@ -85,10 +85,14 @@ export default new Vuex.Store({
       commit('SET_NAV_DRAWER_OPEN', setOpen);
     },
 
-    init({getters}) {
+    init({getters, dispatch}) {
       if (getters.apiKey) {
         api.setAuthorization(getters.apiKey);
+        if (this.state.profiles.length === 0) {
+          dispatch('fetchProfiles');
+        }
       }
+      dispatch('spending/init');
     },
 
     clearState({commit, dispatch}) {
