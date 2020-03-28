@@ -4,6 +4,7 @@
       <div class="d-flex justify-center mt-3 mb-3">
         <v-btn raised color="primary" @click="dialogOpen = !dialogOpen">api key</v-btn>
       </div>
+
       <v-dialog persistent v-model="dialogOpen" width="400">
         <api-key-setter
           v-on:api-key-set="closeApiSetterDialog"
@@ -20,11 +21,7 @@
         </v-list-item>
       </v-list>
 
-      <v-divider></v-divider>
-
-      <!-- <v-list dense>
-        <v-list-item>dickbutt</v-list-item>
-      </v-list> -->
+      <v-divider v-if="profiles.length !== 0"></v-divider>
 
       <app-balances></app-balances>
 
@@ -64,10 +61,7 @@ export default {
   methods: {
     ...mapActions({
       setNavDrawerOpen: 'setNavDrawerOpen',
-      init: 'init',
-      selectProfile: 'selectProfile',
-      setApiKey: 'setApiKey',
-      removeApiKey: 'removeApiKey'
+      selectProfile: 'selectProfile'
     }),
 
     onSelectProfile(index) {
