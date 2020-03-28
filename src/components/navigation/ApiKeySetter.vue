@@ -2,6 +2,9 @@
   <v-card>
     <v-card-text>
       <div class="pa-2">
+        <div class="d-flex justify-center mb-3 mt-3">
+          <h3>Set Api Key</h3>
+        </div>
         <v-text-field
           class="api-key-input"
           placeholder="API Key"
