@@ -132,6 +132,10 @@ export default new Vuex.Store({
       dispatch('clearSelectedBalance');
     },
 
+    deselectProfile({commit}) {
+      commit('SET_SELECTED_ACCOUNT', undefined);
+    },
+
     fetchAccount({commit}, profileId) {
       api.getAccounts(profileId)
       .then((response) => {
