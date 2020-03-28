@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex justify-center">
 
-    <div v-if="!isBalanceSelected">
-      <h1>pick one of your balances to see spending</h1>
+    <div v-if="!isBalanceSelected" class="ma-10">
+      <h3>Pick one of your balances to see spending.</h3>
     </div>
 
     <div v-else>

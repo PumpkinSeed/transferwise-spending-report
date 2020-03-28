@@ -19,11 +19,16 @@
               :name="profile.name" :type="profile.type" :isBusiness="profile.isBusiness" :isSelected="selectedProfile == index"
               @click.native="onSelectProfile(index)"/>
         </v-list-item>
+        <v-list-item v-if="profiles.length === 0">
+          <h4>Add Api Key to see profiles.</h4>
+        </v-list-item>
       </v-list>
 
       <v-divider v-if="profiles.length !== 0"></v-divider>
 
-      <app-balances></app-balances>
+      <div v-if="profiles.length !== 0">
+        <app-balances></app-balances>
+      </div>
 
     </v-navigation-drawer>
 </template>
