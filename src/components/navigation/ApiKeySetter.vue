@@ -2,16 +2,19 @@
   <v-card>
     <v-card-text>
       <div class="pa-2">
+
         <div class="d-flex justify-center mb-3 mt-3">
           <h3>Set Api Key</h3>
         </div>
+
         <v-text-field
           class="api-key-input"
           placeholder="API Key"
           :append-icon="showApiKey ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showApiKey ? 'text' : 'password'"
           @click:append="showApiKey = !showApiKey"
-          v-model="inputApiKey"></v-text-field>
+          v-model="inputApiKey"/>
+
         <div class="d-flex justify-space-between">
           <div>
             <v-btn text @click="onSetApiKey">set</v-btn>
@@ -19,8 +22,9 @@
           </div>
           <div>
             <v-btn text @click="onCancel">cancel</v-btn>
-          </DIV>
+          </div>
         </div>
+
       </div>
     </v-card-text>
   </v-card>
