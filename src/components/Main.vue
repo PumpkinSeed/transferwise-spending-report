@@ -9,7 +9,7 @@
 import { mapActions } from 'vuex';
 
 import SpendingReport from './spending-report/SpendingReport.vue'
-import NavDrawer from './NavDrawer.vue';
+import NavDrawer from './navigation/NavDrawer.vue';
 
 export default {
 
