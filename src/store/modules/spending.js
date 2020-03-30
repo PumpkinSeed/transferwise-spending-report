@@ -107,16 +107,18 @@ const actions = {
     commit('SET_END_DATE', endDate);
   },
 
-  fetchTransactions({commit, getters, rootGetters}) {
+  fetchTransactions({commit, getters, rootGetters, dispatch}) {
     const profileId = rootGetters.selectedAccount.profileId;
     const accountId = rootGetters.selectedAccount.id;
     const currency = rootGetters.selectedBalanceCurrency;
     const start = getters.startDate;
     const end = getters.endDate;
+    dispatch('loading/setSpendingLoading', true, {root: true});
     api.getStatement(profileId, accountId, currency, start, end)
     .then((response) => {
       commit('SET_TRANSACTIONS', getSpendingTransactions(response));
     })
+    .finally(() => dispatch('loading/setSpendingLoading', false, {root: true}));
   },
 
   clearTransactions({commit}) {

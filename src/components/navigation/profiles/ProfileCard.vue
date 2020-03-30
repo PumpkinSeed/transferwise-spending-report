@@ -37,7 +37,7 @@ export default {
 <style scoped>
 
 .profile-card{
-  width: 300px;
+  width: 220px;
   cursor: pointer;
 }
 

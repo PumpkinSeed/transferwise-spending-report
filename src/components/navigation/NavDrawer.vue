@@ -13,12 +13,24 @@
 
       <v-divider></v-divider>
 
-      <div>
-        <app-profiles></app-profiles>
+      <div class="d-flex justify-center" >
+        <div class="mt-5" v-if="isProfileCardsLoading">
+          <v-progress-circular
+            :size="50"
+            color="primary"
+            indeterminate/>
+        </div>
+        <app-profiles v-else></app-profiles>
       </div>
 
-      <div v-if="profiles.length !== 0">
-        <app-balances></app-balances>
+      <div class="d-flex justify-center" v-if="profiles.length !== 0">
+        <div class="mt-5" v-if="isBalanceCardsLoading">
+          <v-progress-circular
+            :size="50"
+            color="primary"
+            indeterminate/>
+        </div>
+        <app-balances v-else></app-balances>
       </div>
 
     </v-navigation-drawer>
@@ -42,7 +54,9 @@ export default {
   computed: {
     ...mapGetters({
       isOpen: 'isNavDrawerOpen',
-      profiles: 'profiles'
+      profiles: 'profiles',
+      isProfileCardsLoading: 'loading/isProfileCardsLoading',
+      isBalanceCardsLoading: 'loading/isBalanceCardsLoading'
     })
   },
 

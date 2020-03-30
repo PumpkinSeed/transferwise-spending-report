@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import api from '../repositories/TransferwiseRepository';
 import spending from './modules/spending';
+import loading from './modules/loading';
 
 Vue.use(Vuex);
 
@@ -28,6 +29,10 @@ export default new Vuex.Store({
     spending: {
       namespaced: true,
       ...spending
+    },
+    loading: {
+      namespaced: true,
+      ...loading
     }
   },
 
@@ -119,12 +124,16 @@ export default new Vuex.Store({
       api.removeAuthorization();
     },
 
-    fetchProfiles({commit}) {
+    fetchProfiles({commit, dispatch}) {
+      dispatch('loading/setProfileCardsLoading', true);
       api.getProfiles()
       .then(response => {
         commit('SET_PROFILES', transformProfiles(response));
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log(error)
+      })
+      .finally(() => dispatch('loading/setProfileCardsLoading', false));
     },
 
     selectProfile({dispatch}, profileId) {
@@ -137,11 +146,13 @@ export default new Vuex.Store({
       dispatch('clearSelectedBalance');
     },
 
-    fetchAccount({commit}, profileId) {
+    fetchAccount({commit, dispatch}, profileId) {
+      dispatch('loading/setBalanceCardsLoading', true);
       api.getAccounts(profileId)
       .then((response) => {
         commit('SET_SELECTED_ACCOUNT', transformAccounts(response));
       })
+      .finally(() => dispatch('loading/setBalanceCardsLoading', false));
     },
 
     selectBalanceCurrency({commit, dispatch}, currency) {
