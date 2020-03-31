@@ -27,6 +27,7 @@
             <v-tabs grow v-model="tab">
               <v-tab>pie chart</v-tab>
               <v-tab>category table</v-tab>
+              <v-tab>Daily spending</v-tab>
             </v-tabs>   
           </div>
 
@@ -37,6 +38,9 @@
               </v-tab-item>
               <v-tab-item>
                 <app-spending-category-talbe v-if="!!categories"/>
+              </v-tab-item>
+              <v-tab-item>
+                <app-daily-spending v-if="!!categories"/>
               </v-tab-item>
             </v-tabs-items>
           </div>
@@ -54,13 +58,15 @@ import { mapGetters } from 'vuex';
 import SpendingCategoryTalbe from './SpendingCategoryTable.vue';
 import DonutChart from './DonutChart.vue';
 import TimeRangePick from './TimeRangePick.vue';
+import DailySpending from './DailySpending.vue';
 
 export default {
 
   components: {
     appSpendingCategoryTalbe: SpendingCategoryTalbe,
     appDonutChart: DonutChart,
-    appTimeRangePick: TimeRangePick
+    appTimeRangePick: TimeRangePick,
+    appDailySpending: DailySpending
   },
 
   computed: {

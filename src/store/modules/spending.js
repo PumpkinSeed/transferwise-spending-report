@@ -82,6 +82,19 @@ const getters = {
     });
     Object.values(categories).forEach((category) => category.percent = (category.amount / getters.totalSpending) * 100);
     return categories;
+  },
+
+  dailySpending(state) {
+    const daysObj = {};
+    state.transactions.forEach((transaction) => {
+      const date = new Date(transaction.date);
+      const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      if (!daysObj[day]) {
+        daysObj[day] = {amount: 0};
+      }
+      daysObj[day].amount += -transaction.amount.value;
+    });
+    return daysObj;
   }
 
 }
@@ -157,3 +170,14 @@ const getSpendingCategory = (str) => {
   }
   return 'Other';
 }
+
+// const getDays = (start, end) => {
+//   const daysArr = [];
+//   const endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+//   let currentDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+//   while (currentDay.valueOf() <= endDay.valueOf()) {
+//     daysArr.push(currentDay);
+//     currentDay = new Date(currentDay.valueOf() + 86400000);
+//   }
+//   return daysArr.map((date) => ({day: date}));
+// }
