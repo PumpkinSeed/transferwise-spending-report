@@ -134,7 +134,7 @@ export default {
 const getSpendingTransactions = (response) => {
   return response.data.transactions
   .filter((transaction) => {
-    return transaction.type === 'DEBIT' && transaction.details.type !== 'CONVERSION'
+    return transaction.type === 'DEBIT' && transaction.details.type === 'CARD'
   })
   .map((transaction) => {
     if (!!transaction.details.category && typeof transaction.details.category === 'string') {
