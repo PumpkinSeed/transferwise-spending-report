@@ -21,13 +21,13 @@ export default {
 
   computed: {
     ...mapGetters({
-      isNavDrawerOpen: 'isNavDrawerOpen'
+      isNavDrawerOpen: 'navigation/isNavDrawerOpen'
     })
   },
 
   methods: {
     ...mapActions({
-      setNavDrawerOpen: 'setNavDrawerOpen',
+      setNavDrawerOpen: 'navigation/setNavDrawerOpen',
     })
   }
 

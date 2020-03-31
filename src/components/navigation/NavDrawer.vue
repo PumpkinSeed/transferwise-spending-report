@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer :value="isOpen" absolute>
+    <v-navigation-drawer :value="isNavDrawerOpen" absolute>
 
       <div class="d-flex justify-center mt-3 mb-3">
         <v-btn raised color="primary" @click="dialogOpen = !dialogOpen">api key</v-btn>
@@ -53,22 +53,32 @@ export default {
 
   computed: {
     ...mapGetters({
-      isOpen: 'isNavDrawerOpen',
+      isNavDrawerOpen: 'navigation/isNavDrawerOpen',
+      isApiKeyModalOpen: 'navigation/isApiKeyModalOpen',
       profiles: 'profiles',
       isProfileCardsLoading: 'loading/isProfileCardsLoading',
       isBalanceCardsLoading: 'loading/isBalanceCardsLoading'
-    })
-  },
-
-  data() {
-    return {
-      dialogOpen: false
+    }),
+    dialogOpen: {
+      get: function() {
+        return this.isApiKeyModalOpen;
+      },
+      set: function(isOpen) {
+        this.setApiKeyModalOpen(!!isOpen);
+      }
     }
   },
 
+  // data() {
+  //   // return {
+  //   //   dialogOpen: false
+  //   // }
+  // },
+
   methods: {
     ...mapActions({
-      setNavDrawerOpen: 'setNavDrawerOpen'
+      setNavDrawerOpen: 'navigation/setNavDrawerOpen',
+      setApiKeyModalOpen: 'navigation/setApiKeyModalOpen'
     }),
     closeApiSetterDialog() {
       this.dialogOpen = false;

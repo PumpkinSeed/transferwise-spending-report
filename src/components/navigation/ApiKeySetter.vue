@@ -13,7 +13,8 @@
           :append-icon="showApiKey ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showApiKey ? 'text' : 'password'"
           @click:append="showApiKey = !showApiKey"
-          v-model="inputApiKey"/>
+          v-model="inputApiKey"
+          :loading="true"/>
 
         <div class="d-flex justify-space-between">
           <div>
@@ -55,7 +56,7 @@ export default {
     }),
     onSetApiKey() {
       this.setApiKey(this.inputApiKey);
-      this.$emit('api-key-set');
+      // this.$emit('api-key-set');
     },
     onClearApiKey() {
       this.inputApiKey = '';
