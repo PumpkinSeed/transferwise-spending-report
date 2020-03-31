@@ -18,7 +18,7 @@ npm run lint
 ```
 
 ### Contributors
-[Janos Mezo](https://github.com/jmezo) [LinkedIn](https://www.linkedin.com/in/janos-mezo/)
+[Janos Mezo](https://github.com/jmezo) - [LinkedIn](https://www.linkedin.com/in/janos-mezo/)
 
 ### Application
 
