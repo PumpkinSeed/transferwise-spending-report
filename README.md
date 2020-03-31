@@ -1,4 +1,4 @@
-*DISCLAIMER: NOT a Transferwise offical app, you can use it on your own responsibility.*
+**DISCLAIMER: NOT a Transferwise offical app, you can use it on your own responsibility.**
 
 # Transferwise spending report
 
