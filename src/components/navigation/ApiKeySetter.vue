@@ -14,7 +14,7 @@
           :type="showApiKey ? 'text' : 'password'"
           @click:append="showApiKey = !showApiKey"
           v-model="inputApiKey"
-          :loading="true"/>
+          :loading="isApiKeyLoading"/>
 
         <div class="d-flex justify-space-between">
           <div>
@@ -38,7 +38,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      apiKey: 'apiKey'
+      apiKey: 'apiKey',
+      isApiKeyLoading: 'loading/isProfileCardsLoading',
     })
   },
 
