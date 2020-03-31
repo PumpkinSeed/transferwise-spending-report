@@ -52,18 +52,18 @@ export default {
   methods: {
     ...mapActions({
       setApiKey: 'setApiKey',
-      removeApiKey: 'removeApiKey'
+      removeApiKey: 'removeApiKey',
+      setApiKeyModalOpen: 'navigation/setApiKeyModalOpen',
     }),
     onSetApiKey() {
       this.setApiKey(this.inputApiKey);
-      // this.$emit('api-key-set');
     },
     onClearApiKey() {
       this.inputApiKey = '';
       this.removeApiKey();
     },
     onCancel() {
-      this.$emit('api-key-cancel');
+      this.setApiKeyModalOpen(false);
     }
   },
 

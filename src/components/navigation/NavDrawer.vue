@@ -6,9 +6,7 @@
       </div>
 
       <v-dialog persistent v-model="dialogOpen" width="400">
-        <api-key-setter
-          v-on:api-key-set="closeApiSetterDialog"
-          v-on:api-key-cancel="closeApiSetterDialog"/>
+        <api-key-setter/>
       </v-dialog>
 
       <v-divider></v-divider>
@@ -69,20 +67,11 @@ export default {
     }
   },
 
-  // data() {
-  //   // return {
-  //   //   dialogOpen: false
-  //   // }
-  // },
-
   methods: {
     ...mapActions({
       setNavDrawerOpen: 'navigation/setNavDrawerOpen',
       setApiKeyModalOpen: 'navigation/setApiKeyModalOpen'
-    }),
-    closeApiSetterDialog() {
-      this.dialogOpen = false;
-    }
+    })
   }
 
 }
