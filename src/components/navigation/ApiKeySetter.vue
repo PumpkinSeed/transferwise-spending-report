@@ -44,15 +44,15 @@ export default {
       isApiKeyAuthorizationError: 'errors/isApiKeyAuthorizationError',
       isApiKeyConnectionError: 'errors/isApiKeyConnectionError'
     }),
-      getInputErrorMessage() {
-        if (this.isApiKeyAuthorizationError) {
-          return 'Api Key not valid.';
-        } else if (this.isApiKeyConnectionError) {
-          return 'Can\'t connect to transferwise server.';
-        } else {
-          return false;
-        }
+    getInputErrorMessage() {
+      if (this.isApiKeyAuthorizationError) {
+        return 'Api Key not valid.';
+      } else if (this.isApiKeyConnectionError) {
+        return 'Can\'t connect to transferwise server.';
+      } else {
+        return false;
       }
+    }
   },
 
   data() {
@@ -69,23 +69,26 @@ export default {
       removeApiKey: 'removeApiKey',
       setApiKeyModalOpen: 'navigation/setApiKeyModalOpen',
       setApiKeyAuthorizationError: 'errors/setApiKeyAuthorizationError',
-      setApiKeyConnectionError: 'errors/setApiKeyConnectionError'
+      setApiKeyConnectionError: 'errors/setApiKeyConnectionError',
+      clearApiErrors: 'errors/clearApiErrors',
     }),
     onSetApiKey() {
+      this.clearApiErrors();
       this.setApiKey(this.inputApiKey);
     },
     onClearApiKey() {
+      this.clearApiErrors();
       this.inputApiKey = '';
       this.removeApiKey();
     },
     onCancel() {
+      this.clearApiErrors();
       this.setApiKeyModalOpen(false);
     }
   },
 
   mounted() {
-    this.setApiKeyAuthorizationError(false);
-    this.setApiKeyConnectionError(false);
+    this.clearApiErrors();
     this.inputApiKey = this.apiKey;
   }
 

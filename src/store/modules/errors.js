@@ -27,6 +27,10 @@ const actions = {
   },
   setApiKeyConnectionError({commit}, isError) {
     commit('SET_API_KEY_CONNECTION_ERROR', isError);
+  },
+  clearApiErrors({dispatch}) {
+    dispatch('setApiKeyAuthorizationError', false);
+    dispatch('setApiKeyConnectionError', false);
   }
 }
 
