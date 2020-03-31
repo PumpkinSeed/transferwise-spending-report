@@ -14,6 +14,7 @@
           :type="showApiKey ? 'text' : 'password'"
           @click:append="showApiKey = !showApiKey"
           v-model="inputApiKey"
+          :error-messages="getInputErrorMessage"
           :loading="isApiKeyLoading"/>
 
         <div class="d-flex justify-space-between">
@@ -40,13 +41,25 @@ export default {
     ...mapGetters({
       apiKey: 'apiKey',
       isApiKeyLoading: 'loading/isProfileCardsLoading',
-    })
+      isApiKeyAuthorizationError: 'errors/isApiKeyAuthorizationError',
+      isApiKeyConnectionError: 'errors/isApiKeyConnectionError'
+    }),
+      getInputErrorMessage() {
+        if (this.isApiKeyAuthorizationError) {
+          return 'Api Key not valid.';
+        } else if (this.isApiKeyConnectionError) {
+          return 'Can\'t connect to transferwise server.';
+        } else {
+          return false;
+        }
+      }
   },
 
   data() {
     return {
       inputApiKey: '',
-      showApiKey: false
+      showApiKey: false,
+
     }
   },
 
@@ -55,6 +68,8 @@ export default {
       setApiKey: 'setApiKey',
       removeApiKey: 'removeApiKey',
       setApiKeyModalOpen: 'navigation/setApiKeyModalOpen',
+      setApiKeyAuthorizationError: 'errors/setApiKeyAuthorizationError',
+      setApiKeyConnectionError: 'errors/setApiKeyConnectionError'
     }),
     onSetApiKey() {
       this.setApiKey(this.inputApiKey);
@@ -69,6 +84,8 @@ export default {
   },
 
   mounted() {
+    this.setApiKeyAuthorizationError(false);
+    this.setApiKeyConnectionError(false);
     this.inputApiKey = this.apiKey;
   }
 
