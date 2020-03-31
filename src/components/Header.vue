@@ -7,8 +7,8 @@
       </v-btn>
     </div>
 
-    <div>
-      <img src="@/assets/tw_fast_flag_blue_rgb.svg" width="112" height="40">
+    <div class="ma-2">
+      <img src="@/assets/tw_fast_flag_blue_rgb.svg" width="auto" height="40">
     </div>
 
   </div>

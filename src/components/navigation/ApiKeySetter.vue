@@ -50,7 +50,7 @@ export default {
       } else if (this.isApiKeyConnectionError) {
         return 'Can\'t connect to transferwise server.';
       } else {
-        return false;
+        return undefined;
       }
     }
   },
