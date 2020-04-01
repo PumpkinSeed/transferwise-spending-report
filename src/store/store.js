@@ -4,6 +4,8 @@ import VuexPersistence from 'vuex-persist';
 import api from '../repositories/TransferwiseRepository';
 import spending from './modules/spending';
 import loading from './modules/loading';
+import navigation from './modules/navigation';
+import errors from './modules/errors';
 
 Vue.use(Vuex);
 
@@ -33,11 +35,18 @@ export default new Vuex.Store({
     loading: {
       namespaced: true,
       ...loading
+    },
+    navigation: {
+      namespaced: true,
+      ...navigation
+    },
+    errors: {
+      namespaced: true,
+      ...errors
     }
   },
 
   state: {
-    navDrawerOpen: false,
     apiKey: undefined,
     profiles: [],
     selectedAccount: undefined,
@@ -45,9 +54,6 @@ export default new Vuex.Store({
   },
 
   getters: {
-    isNavDrawerOpen(state) {
-      return state.navDrawerOpen;
-    },
     apiKey(state) {
       return state.apiKey;
     },
@@ -67,9 +73,6 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    'SET_NAV_DRAWER_OPEN' (state, setOpen) {
-      state.navDrawerOpen = setOpen;
-    },
     'SET_API_KEY' (state, apiKey) {
       state.apiKey = apiKey;
     },
@@ -85,10 +88,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-
-    setNavDrawerOpen({commit}, setOpen) {
-      commit('SET_NAV_DRAWER_OPEN', setOpen);
-    },
 
     init({getters, dispatch}) {
       if (getters.apiKey) {
@@ -108,10 +107,11 @@ export default new Vuex.Store({
       dispatch('spending/clearState');
     },
 
-    setApiKey({commit, dispatch, getters}, apiKey) {
+    setApiKey({commit, dispatch}, apiKey) {
       if (!apiKey || apiKey === '') {
         dispatch('clearState');
-      } else if (apiKey !== getters.apiKey) {
+        dispatch('navigation/setApiKeyModalOpen', false);
+      } else {
         dispatch('clearState');
         commit('SET_API_KEY', apiKey);
         api.setAuthorization(apiKey);
@@ -128,10 +128,16 @@ export default new Vuex.Store({
       dispatch('loading/setProfileCardsLoading', true);
       api.getProfiles()
       .then(response => {
+        console.log(response);
         commit('SET_PROFILES', transformProfiles(response));
+        dispatch('navigation/setApiKeyModalOpen', false);
       })
       .catch(error => {
-        console.log(error)
+        if (error.response?.status === 401) {
+          dispatch('errors/setApiKeyAuthorizationError', true);
+        } else {
+          dispatch('errors/setApiKeyConnectionError', true);
+        }
       })
       .finally(() => dispatch('loading/setProfileCardsLoading', false));
     },

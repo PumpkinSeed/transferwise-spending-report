@@ -82,6 +82,21 @@ const getters = {
     });
     Object.values(categories).forEach((category) => category.percent = (category.amount / getters.totalSpending) * 100);
     return categories;
+  },
+
+  dailySpending(state) {
+    const testDays = getDays(state.startDate, state.endDate);
+    state.transactions.forEach((transaction) => {
+      const date = new Date(transaction.date);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const dayObj = testDays.find((a) => a.day.getFullYear() === year && a.day.getMonth() === month && a.day.getDate() == day);
+      if (dayObj) {
+        dayObj.amount += -transaction.amount.value;
+      }
+    });
+    return testDays;
   }
 
 }
@@ -134,7 +149,7 @@ export default {
 const getSpendingTransactions = (response) => {
   return response.data.transactions
   .filter((transaction) => {
-    return transaction.type === 'DEBIT' && transaction.details.type !== 'CONVERSION'
+    return transaction.type === 'DEBIT' && transaction.details.type === 'CARD'
   })
   .map((transaction) => {
     if (!!transaction.details.category && typeof transaction.details.category === 'string') {
@@ -156,4 +171,17 @@ const getSpendingCategory = (str) => {
     }
   }
   return 'Other';
+}
+
+const getDays = (start, end) => {
+  start = new Date(start);
+  end = new Date(end);
+  const daysArr = [];
+  const endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+  let currentDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  while (currentDay.valueOf() <= endDay.valueOf()) {
+    daysArr.push(currentDay);
+    currentDay = new Date(currentDay.valueOf() + 86400000);
+  }
+  return daysArr.map((date) => ({day: date, amount: 0}));
 }

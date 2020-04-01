@@ -13,7 +13,9 @@
           :append-icon="showApiKey ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showApiKey ? 'text' : 'password'"
           @click:append="showApiKey = !showApiKey"
-          v-model="inputApiKey"/>
+          v-model="inputApiKey"
+          :error-messages="getInputErrorMessage"
+          :loading="isApiKeyLoading"/>
 
         <div class="d-flex justify-space-between">
           <div>
@@ -37,36 +39,56 @@ export default {
 
   computed: {
     ...mapGetters({
-      apiKey: 'apiKey'
-    })
+      apiKey: 'apiKey',
+      isApiKeyLoading: 'loading/isProfileCardsLoading',
+      isApiKeyAuthorizationError: 'errors/isApiKeyAuthorizationError',
+      isApiKeyConnectionError: 'errors/isApiKeyConnectionError'
+    }),
+    getInputErrorMessage() {
+      if (this.isApiKeyAuthorizationError) {
+        return 'Api Key not valid.';
+      } else if (this.isApiKeyConnectionError) {
+        return 'Can\'t connect to transferwise server.';
+      } else {
+        return undefined;
+      }
+    }
   },
 
   data() {
     return {
       inputApiKey: '',
-      showApiKey: false
+      showApiKey: false,
+
     }
   },
 
   methods: {
     ...mapActions({
       setApiKey: 'setApiKey',
-      removeApiKey: 'removeApiKey'
+      removeApiKey: 'removeApiKey',
+      setApiKeyModalOpen: 'navigation/setApiKeyModalOpen',
+      setApiKeyAuthorizationError: 'errors/setApiKeyAuthorizationError',
+      setApiKeyConnectionError: 'errors/setApiKeyConnectionError',
+      clearApiErrors: 'errors/clearApiErrors',
     }),
     onSetApiKey() {
+      this.clearApiErrors();
       this.setApiKey(this.inputApiKey);
-      this.$emit('api-key-set');
     },
     onClearApiKey() {
+      this.clearApiErrors();
       this.inputApiKey = '';
       this.removeApiKey();
     },
     onCancel() {
-      this.$emit('api-key-cancel');
+      this.clearApiErrors();
+      this.setApiKeyModalOpen(false);
     }
   },
 
   mounted() {
+    this.clearApiErrors();
     this.inputApiKey = this.apiKey;
   }
 

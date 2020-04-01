@@ -1,14 +1,12 @@
 <template>
-    <v-navigation-drawer :value="isOpen" absolute>
+    <v-navigation-drawer :value="isNavDrawerOpen" absolute>
 
       <div class="d-flex justify-center mt-3 mb-3">
         <v-btn raised color="primary" @click="dialogOpen = !dialogOpen">api key</v-btn>
       </div>
 
       <v-dialog persistent v-model="dialogOpen" width="400">
-        <api-key-setter
-          v-on:api-key-set="closeApiSetterDialog"
-          v-on:api-key-cancel="closeApiSetterDialog"/>
+        <api-key-setter/>
       </v-dialog>
 
       <v-divider></v-divider>
@@ -53,26 +51,27 @@ export default {
 
   computed: {
     ...mapGetters({
-      isOpen: 'isNavDrawerOpen',
+      isNavDrawerOpen: 'navigation/isNavDrawerOpen',
+      isApiKeyModalOpen: 'navigation/isApiKeyModalOpen',
       profiles: 'profiles',
       isProfileCardsLoading: 'loading/isProfileCardsLoading',
       isBalanceCardsLoading: 'loading/isBalanceCardsLoading'
-    })
-  },
-
-  data() {
-    return {
-      dialogOpen: false
+    }),
+    dialogOpen: {
+      get: function() {
+        return this.isApiKeyModalOpen;
+      },
+      set: function(isOpen) {
+        this.setApiKeyModalOpen(!!isOpen);
+      }
     }
   },
 
   methods: {
     ...mapActions({
-      setNavDrawerOpen: 'setNavDrawerOpen'
-    }),
-    closeApiSetterDialog() {
-      this.dialogOpen = false;
-    }
+      setNavDrawerOpen: 'navigation/setNavDrawerOpen',
+      setApiKeyModalOpen: 'navigation/setApiKeyModalOpen'
+    })
   }
 
 }
