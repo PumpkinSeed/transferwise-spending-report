@@ -1,3 +1,5 @@
+**DISCLAIMER: NOT a Transferwise offical app, you can use it on your own responsibility.**
+
 # Transferwise spending report
 
 Web tool built on top of Transferwise's API. It serve a purpose of having a clear view about the Transferwise account's spending. 
