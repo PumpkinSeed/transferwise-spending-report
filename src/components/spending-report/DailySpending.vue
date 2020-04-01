@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div>hi</div>
-    <div>
+    <div class="mt-5">
       <apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
     </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
 import {mapGetters} from 'vuex';
 
 
@@ -15,20 +15,27 @@ export default {
 
   computed: {
     ...mapGetters({
-      dailySpending: 'spending/dailySpending'
+      dailySpending: 'spending/dailySpending',
+      selectedCurrency: 'selectedBalanceCurrency'
     }),
+
     chartCategories() {
       if (!this.dailySpending) return [];
-      return Object.keys(this.dailySpending).map((date) => `${new Date(date).getMonth()}-${new Date(date).getDate()}`)
+      return this.dailySpending.map((entry) => {
+        const date = new Date(entry.day);
+        var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        return date.toLocaleString('EU', options);
+      })
     },
+
     chartAmounts() {
       if (!this.dailySpending) return [];
-      return Object.values(this.dailySpending).map((val) => val.amount);
+      return this.dailySpending.map((entry) => entry.amount);
     },
 
     series() {
       return [{
-        name: 'Net Profit',
+        name: 'Spending',
         data: this.chartAmounts
       }]
     },
@@ -49,39 +56,36 @@ export default {
         dataLabels: {
           enabled: false
         },
-        stroke: {
-          show: true,
-          width: 2,
-          colors: ['transparent']
-        },
         xaxis: {
-            categories: this.chartCategories
+            categories: this.chartCategories,
+            labels: {
+              rotate: 0,
+              formatter: (value)  => {
+                const date = new Date(value);
+                var options = { month: 'short', day: 'numeric' };
+                return date.toLocaleDateString('EU', options)
+              }
+            }
         },
         yaxis: {
           title: {
-            text: '$ (thousands)'
-          }
-        },
-        fill: {
-          opacity: 1
+            text: this.selectedCurrency
+          },
+          labels: {
+              show: true,
+              formatter: (value) => value,
+          },
         },
         tooltip: {
           y: {
-            formatter: function (val) {
-              return "$ " + val + " thousands"
+            formatter: (val) => {
+              return Vue.filter('moneyFormat')(val, this.selectedCurrency);
             }
           }
         }
       }
     },
 
-  },
-
-  mounted() {
-    // console.log(this.dailySpending);
-    // console.log(Object.values(this.dailySpending).reduce((prev, curr) => prev + curr.amount, 0));
-    // console.log(this.chartCategories)
-    // console.log(this.chartAmounts);
   }
 
 }

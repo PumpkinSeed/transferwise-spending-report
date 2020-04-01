@@ -19,7 +19,7 @@
         </div>
 
         <div class="d-flex justify-center mt-10" v-else-if="transactions.length === 0">
-          <h3>No spending in selected period.</h3>
+          <h3>No spending in the selected period.</h3>
         </div>
 
         <div class="app-tabs" v-else>
