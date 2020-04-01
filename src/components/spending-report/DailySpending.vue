@@ -44,7 +44,15 @@ export default {
       return {
         chart: {
           type: 'bar',
-          height: 350
+          height: 350,
+          events: {
+            click: (event, chartContext, config) =>  {
+              console.log(chartContext);
+              console.log(config);
+              console.log(event.target);
+              console.log(event.target.id);
+            }
+          }
         },
         plotOptions: {
           bar: {
