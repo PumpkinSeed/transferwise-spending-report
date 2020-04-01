@@ -107,11 +107,9 @@ export default new Vuex.Store({
       dispatch('spending/clearState');
     },
 
-    setApiKey({commit, dispatch, getters}, apiKey) {
+    setApiKey({commit, dispatch}, apiKey) {
       if (!apiKey || apiKey === '') {
         dispatch('clearState');
-        dispatch('navigation/setApiKeyModalOpen', false);
-      } else if (apiKey === getters.apiKey) {
         dispatch('navigation/setApiKeyModalOpen', false);
       } else {
         dispatch('clearState');
