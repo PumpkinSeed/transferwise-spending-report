@@ -20,7 +20,7 @@
   <div class="text-center">
     <v-dialog v-model="dialogOpen" width="800">
       <v-card>
-        <app-transactions-list :category="selectedCategory"></app-transactions-list>
+        <app-transactions-list :options="dialogOptions"></app-transactions-list>
       </v-card>
     </v-dialog>
   </div>
@@ -70,14 +70,14 @@ export default {
         { text: 'spending %', value: 'percent' },
       ],
       dialogOpen: false,
-      selectedCategory: undefined
+      dialogOptions: undefined
     }
   },
 
   methods: {
     onClickRow(category) {
       this.dialogOpen = true;
-      this.selectedCategory = category.name;
+      this.dialogOptions = {category: category.name};
     }
   }
 

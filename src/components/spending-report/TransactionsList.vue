@@ -24,7 +24,7 @@ export default {
       transactions: 'spending/filteredTransactions'
     }),
     transactionsForTable() {
-      return this.transactions({category: this.category}).map((transaction) => {
+      return this.transactions(this.options).map((transaction) => {
         const location = `${transaction.details.merchant.city} ${transaction.details.merchant.country}`;
         return {
           date: transaction.date,
@@ -39,7 +39,7 @@ export default {
   },
 
   props: {
-    category: String
+    options: Object
   },
 
   data() {
