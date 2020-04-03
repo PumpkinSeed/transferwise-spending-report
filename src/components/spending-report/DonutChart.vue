@@ -62,8 +62,6 @@ export default {
             dataPointSelection: (event, chartContext, config) =>  {
               const dataIndex = config.dataPointIndex;
               if (dataIndex < 0) return;
-              console.log(this.legendData);
-              console.log(this.legendData[dataIndex].name)
               this.dialogOptions = {category: this.legendData[dataIndex].name};
               this.dialogOpen = true;
             }
@@ -95,6 +93,7 @@ export default {
       return Object.values(this.categories).map((category) => +category.amount.toFixed(2));
     }
   },
+
   data() {
     return {
       colors: ['#F66D44', '#FEAE65', '#E6F69D', '#AADEA7', '#64C2A6', '#2D87BB', '#E8A09A', '#E8A09A', '#FBE29F', '#C6D68F'],
@@ -102,6 +101,7 @@ export default {
       dialogOptions: undefined
     }
   }
+
 }
 </script>
 
