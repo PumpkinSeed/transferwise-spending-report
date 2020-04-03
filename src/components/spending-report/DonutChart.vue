@@ -11,13 +11,28 @@
           </div>
         </div>
       </div>
+
+      <div class="text-center">
+        <v-dialog v-model="dialogOpen" width="800">
+          <v-card>
+            <app-transactions-list :options="dialogOptions"></app-transactions-list>
+          </v-card>
+        </v-dialog>
+      </div>
+
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import TransactionsList from './TransactionsList.vue';
 
 export default {
+
+  components: {
+    appTransactionsList: TransactionsList
+  },
+
   computed: {
     ...mapGetters({
       categories: 'spending/transactionCategories',
@@ -41,6 +56,18 @@ export default {
           onItemClick: {
             toggleDataSeries: false
           },
+        },
+        chart: {
+          events: {
+            dataPointSelection: (event, chartContext, config) =>  {
+              const dataIndex = config.dataPointIndex;
+              if (dataIndex < 0) return;
+              console.log(this.legendData);
+              console.log(this.legendData[dataIndex].name)
+              this.dialogOptions = {category: this.legendData[dataIndex].name};
+              this.dialogOpen = true;
+            }
+          }
         },
         plotOptions: {
           pie: {
@@ -70,7 +97,9 @@ export default {
   },
   data() {
     return {
-      colors: ['#F66D44', '#FEAE65', '#E6F69D', '#AADEA7', '#64C2A6', '#2D87BB', '#E8A09A', '#E8A09A', '#FBE29F', '#C6D68F']
+      colors: ['#F66D44', '#FEAE65', '#E6F69D', '#AADEA7', '#64C2A6', '#2D87BB', '#E8A09A', '#E8A09A', '#FBE29F', '#C6D68F'],
+      dialogOpen: false,
+      dialogOptions: undefined
     }
   }
 }
