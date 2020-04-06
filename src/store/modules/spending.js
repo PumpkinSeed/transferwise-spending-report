@@ -53,7 +53,7 @@ const getters = {
           checkStartDate = new Date(transaction.date).getTime() >= new Date(filterOptions.startDate).getTime();
         }
         if (filterOptions.endDate) {
-          checkEndDate = new Date(transaction.date).getTime() <= new Date(filterOptions.checkEndDate).getTime();
+          checkEndDate = new Date(transaction.date).getTime() <= new Date(filterOptions.endDate).getTime();
         }
         if (filterOptions.category) {
           checkCategory = transaction.category === filterOptions.category;
